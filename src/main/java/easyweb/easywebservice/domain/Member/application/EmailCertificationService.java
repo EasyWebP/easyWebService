@@ -100,7 +100,7 @@ public class EmailCertificationService {
                                             </tr>
                                             <tr>
                                                 <td style='font-size:14px;line-height:22px;font-weight:normal;color:#000000;text-align:left;letter-spacing:-1px;font-family:나눔고딕, NanumGothic, 맑은고딕, Malgun Gothic, 돋움, Dotum, Helvetica, Apple SD Gothic Neo, Sans-serif;'>
-                                                    <p style='margin:0;padding:0;'>감사합니다.<br>우리가</p>
+                                                    <p style='margin:0;padding:0;'>감사합니다.<br>With Drone</p>
                                                 </td>
                                             </tr>
                                             </tbody>
@@ -114,7 +114,7 @@ public class EmailCertificationService {
                     </tbody>
                 </table>""";
         mimeMessage.setText(msg, "utf-8", "html");
-        mimeMessage.setFrom(new InternetAddress("uliga_dev_team@naver.com", "ULIGA_admin"));
+        mimeMessage.setFrom(new InternetAddress("uliga_dev_team@naver.com", "with_drone_admin"));
         return mimeMessage;
     }
 
@@ -237,7 +237,7 @@ public class EmailCertificationService {
                                             </tr>
                                             <tr>
                                                 <td style='font-size:14px;line-height:22px;font-weight:normal;color:#000000;text-align:left;letter-spacing:-1px;font-family:나눔고딕, NanumGothic, 맑은고딕, Malgun Gothic, 돋움, Dotum, Helvetica, Apple SD Gothic Neo, Sans-serif;'>
-                                                    <p style='margin:0;padding:0;'>감사합니다.<br>우리가</p>
+                                                    <p style='margin:0;padding:0;'>감사합니다.<br>With Drone</p>
                                                 </td>
                                             </tr>
                                             </tbody>
@@ -251,7 +251,7 @@ public class EmailCertificationService {
                     </tbody>
                 </table>""";
         mimeMessage.setText(msg, "utf-8", "html");
-        mimeMessage.setFrom(new InternetAddress("uliga_dev_team@naver.com", "ULIGA_admin"));
+        mimeMessage.setFrom(new InternetAddress("uliga_dev_team@naver.com", "with_drone_admin"));
         return mimeMessage;
     }
 
