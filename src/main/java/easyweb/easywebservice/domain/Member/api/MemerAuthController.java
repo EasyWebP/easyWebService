@@ -2,10 +2,8 @@ package easyweb.easywebservice.domain.Member.api;
 
 import easyweb.easywebservice.domain.Member.application.AuthService;
 import easyweb.easywebservice.domain.Member.application.EmailCertificationService;
-import easyweb.easywebservice.domain.Member.dto.MemberDTO.EmailExistenceDto;
-import easyweb.easywebservice.domain.Member.dto.MemberDTO.LoginDto;
-import easyweb.easywebservice.domain.Member.dto.MemberDTO.LoginResult;
-import easyweb.easywebservice.domain.Member.dto.MemberDTO.SignUpDto;
+import easyweb.easywebservice.domain.Member.dto.MemberDTO;
+import easyweb.easywebservice.domain.Member.dto.MemberDTO.*;
 import easyweb.easywebservice.domain.common.dto.CommonDto.BooleanApiResult;
 import easyweb.easywebservice.domain.common.dto.CommonDto.StringApiResult;
 import io.swagger.v3.oas.annotations.Operation;
@@ -17,10 +15,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "사용자 인증", description = "사용자 인증 관련 API 입니다.")
 @Slf4j
@@ -55,6 +50,27 @@ public class MemerAuthController {
     })
     @PostMapping(value = "/login")
     public ResponseEntity<LoginResult> login(@RequestBody LoginDto loginDto) {
+
         return ResponseEntity.ok(authService.login(loginDto));
+    }
+
+    @Operation(summary = "멤버 이메일 인증", description = "멤버 이메일 인증시 호출하는 API 입니다")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "멤버 이메일 인증 요청시", content = @Content(schema = @Schema(implementation = StringApiResult.class)))
+    })
+    @PostMapping(value = "/email/certificate")
+    public ResponseEntity<StringApiResult> memberEmailCertificate(@RequestBody EmailCertificateDto emailCertificateDto) throws Exception {
+
+        return ResponseEntity.ok(emailCertificationService.sendSimpleMessage(emailCertificateDto.getEmail()));
+    }
+
+    @Operation(summary = "멤버 이메일 인증 확인", description = "멤버 이메일 인증 확인시 호출하는 API입니다")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "멤버 이메일 인증 확인시", content = @Content(schema = @Schema(implementation = CodeConfirmDto.class)))
+    })
+    @PostMapping(value = "/email/check")
+    public ResponseEntity<CodeConfirmDto> memberEmailCertificateCheck(@RequestBody EmailConfirmCodeDto emailConfirmCodeDto) {
+
+        return ResponseEntity.ok(emailCertificationService.confirmCode(emailConfirmCodeDto));
     }
 }

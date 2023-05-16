@@ -73,6 +73,15 @@ public class MemberDTO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Getter
+    public static class EmailCertificateDto {
+        @Schema(description = "인증할 이메일")
+        private String email;
+    }
+
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
     @Setter
     public static class CodeConfirmDto {
         @Schema(description = "일치시", example = "true", defaultValue = "false")

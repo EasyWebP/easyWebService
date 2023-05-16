@@ -7,6 +7,8 @@ import easyweb.easywebservice.domain.Member.exception.EmailCertificationExpireEx
 import easyweb.easywebservice.domain.Member.exception.MemberNotFoundByEmail;
 import easyweb.easywebservice.domain.Member.model.Member;
 import easyweb.easywebservice.domain.Member.repository.MemberRepository;
+import easyweb.easywebservice.domain.common.dto.CommonDto;
+import easyweb.easywebservice.domain.common.dto.CommonDto.StringApiResult;
 import jakarta.mail.Message;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
@@ -48,7 +50,7 @@ public class EmailCertificationService {
     public MimeMessage createMessage(String to) throws MessagingException, UnsupportedEncodingException {
         MimeMessage mimeMessage = emailSender.createMimeMessage();
         mimeMessage.addRecipients(Message.RecipientType.TO, to);
-        mimeMessage.setSubject("공유 가계부 우리가 이메일 인증");
+        mimeMessage.setSubject("WithDrone 이메일 인증");
 
 
         String msg = "";
@@ -69,12 +71,12 @@ public class EmailCertificationService {
                                             <tbody>
                                             <tr>
                                                 <td style='font-size:44px;line-height:48px;font-weight:bold;color:#000000;padding-bottom:60px;text-align:left;letter-spacing:-1px;font-family:나눔고딕, NanumGothic, 맑은고딕, Malgun Gothic, 돋움, Dotum, Helvetica, Apple SD Gothic Neo, Sans-serif;'>
-                                                    <span>우리가 이메일 인증 코드</span>
+                                                    <span>WithDrone 이메일 인증 코드</span>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td style='padding-bottom:50px;font-size:14px;line-height:22px;font-weight:normal;color:#000000;text-align:left;letter-spacing:-1px;font-family:나눔고딕, NanumGothic, 맑은고딕, Malgun Gothic, 돋움, Dotum, Helvetica, Apple SD Gothic Neo, Sans-serif;'>
-                                                    <p style='margin:0;padding:0;'>공유 가계부 우리가 회원 가입 과정 중, 사용자 인증을 위해
+                                                    <p style='margin:0;padding:0;'>WithDrone 회원 가입 과정 중, 사용자 인증을 위해
                                                         발송된 이메일입니다. </p>
                                                     <p style='margin:0;padding:0;'>인증 과정을 완료하기 위해 아래 인증 코드를 입력해주세요.</p>
                                                 </td>
@@ -112,7 +114,7 @@ public class EmailCertificationService {
                     </tbody>
                 </table>""";
         mimeMessage.setText(msg, "utf-8", "html");
-        mimeMessage.setFrom(new InternetAddress("uliga_dev_team@naver.com", "ULIGA_admin"));
+        mimeMessage.setFrom(new InternetAddress("with_drone@naver.com", "WithDrone_admin"));
         return mimeMessage;
     }
 
@@ -135,7 +137,7 @@ public class EmailCertificationService {
      * @param to 수신자 이메일
      * @throws Exception 발송 실패 예외
      */
-    public void sendSimpleMessage(String to) throws Exception {
+    public StringApiResult sendSimpleMessage(String to) throws Exception {
         ePw = createKey();
         MimeMessage message = createMessage(to);
         try {
@@ -147,6 +149,8 @@ public class EmailCertificationService {
         } catch (MailException es) {
             throw new IllegalArgumentException(es.getMessage());
         }
+
+        return StringApiResult.builder().result("SUCCESS").build();
 
     }
 
@@ -183,7 +187,7 @@ public class EmailCertificationService {
     public MimeMessage createPasswordMessage(String to, String password) throws MessagingException, UnsupportedEncodingException {
         MimeMessage mimeMessage = emailSender.createMimeMessage();
         mimeMessage.addRecipients(Message.RecipientType.TO, to);
-        mimeMessage.setSubject("공유 가계부 우리가 비밀번호 분실");
+        mimeMessage.setSubject("WithDrone 비밀번호 분실");
 
 
         String msg = "";
@@ -204,12 +208,12 @@ public class EmailCertificationService {
                                             <tbody>
                                             <tr>
                                                 <td style='font-size:44px;line-height:48px;font-weight:bold;color:#000000;padding-bottom:60px;text-align:left;letter-spacing:-1px;font-family:나눔고딕, NanumGothic, 맑은고딕, Malgun Gothic, 돋움, Dotum, Helvetica, Apple SD Gothic Neo, Sans-serif;'>
-                                                    <span>우리가 비밀번호 분실</span>
+                                                    <span>WithDrone 분실</span>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td style='padding-bottom:50px;font-size:14px;line-height:22px;font-weight:normal;color:#000000;text-align:left;letter-spacing:-1px;font-family:나눔고딕, NanumGothic, 맑은고딕, Malgun Gothic, 돋움, Dotum, Helvetica, Apple SD Gothic Neo, Sans-serif;'>
-                                                    <p style='margin:0;padding:0;'>공유 가계부 우리가 비밀번호 분실로 인해
+                                                    <p style='margin:0;padding:0;'>WithDrone 비밀번호 분실로 인해
                                                         새로운 비밀번호 발송드립니다. </p>
                                                     <p style='margin:0;padding:0;'>아래 비밀번호로 로그인을 진행해 주세요.</p>
                                                 </td>
@@ -247,7 +251,7 @@ public class EmailCertificationService {
                     </tbody>
                 </table>""";
         mimeMessage.setText(msg, "utf-8", "html");
-        mimeMessage.setFrom(new InternetAddress("uliga_dev_team@naver.com", "ULIGA_admin"));
+        mimeMessage.setFrom(new InternetAddress("with_drone@naver.com", "WithDrone_admin"));
         return mimeMessage;
     }
 
