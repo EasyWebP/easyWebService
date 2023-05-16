@@ -7,14 +7,58 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 
 public class MemberDTO {
+
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
     @Getter
-    public static class ResetPasswordRequest {
+    public static class SignUpDto {
+        @Schema(description = "회원가입할 유저 이메일")
+        private String email;
+        @Schema(description = "회원가입할 유저 비밀번호")
+        private String password;
+        @Schema(description = "회원가입할 유저 이름")
+        private String username;
+    }
+
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
+    public static class ResetPasswordDto {
         @Schema(description = "비밀번호 초기화할 이메일", defaultValue = "test@email.com")
         private String email;
     }
+
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
+    public static class EmailExistenceDto {
+        @Schema(description = "존재 확인할 이메일", defaultValue = "test@email.com")
+        private String email;
+    }
+
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
+    public static class LoginDto {
+        @Schema(description = "로그인할 유저 이메일")
+        private String email;
+        @Schema(description = "로그인할 유저 비밀번호")
+        private String password;
+    }
+
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
+    public static class LoginResult {
+
+    }
+
+
 
     @Builder
     @AllArgsConstructor

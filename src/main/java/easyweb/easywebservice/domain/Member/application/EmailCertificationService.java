@@ -1,8 +1,8 @@
 package easyweb.easywebservice.domain.Member.application;
 
-import easyweb.easywebservice.domain.Member.dto.MemberDTO;
 import easyweb.easywebservice.domain.Member.dto.MemberDTO.CodeConfirmDto;
 import easyweb.easywebservice.domain.Member.dto.MemberDTO.EmailConfirmCodeDto;
+import easyweb.easywebservice.domain.Member.dto.MemberDTO.ResetPasswordDto;
 import easyweb.easywebservice.domain.Member.exception.EmailCertificationExpireException;
 import easyweb.easywebservice.domain.Member.exception.MemberNotFoundByEmail;
 import easyweb.easywebservice.domain.Member.model.Member;
@@ -152,15 +152,15 @@ public class EmailCertificationService {
 
     /**
      * 비밀번호 초기화 메서드
-     * @param resetPasswordRequest 비밀번호 초기화할 이메일
+     * @param resetPasswordDto 비밀번호 초기화할 이메일
      */
     @Transactional
-    public void resetPassword(MemberDTO.ResetPasswordRequest resetPasswordRequest) throws MessagingException, UnsupportedEncodingException {
-        Member member = memberRepository.findByEmailAndDeleted(resetPasswordRequest.getEmail(), false).orElseThrow(MemberNotFoundByEmail::new);
+    public void resetPassword(ResetPasswordDto resetPasswordDto) throws MessagingException, UnsupportedEncodingException {
+        Member member = memberRepository.findByEmailAndDeleted(resetPasswordDto.getEmail(), false).orElseThrow(MemberNotFoundByEmail::new);
         String newPassword = createRandomPassword();
         String encode = passwordEncoder.encode(newPassword);
         member.updatePassword(encode);
-        MimeMessage passwordMessage = createPasswordMessage(resetPasswordRequest.getEmail(), newPassword);
+        MimeMessage passwordMessage = createPasswordMessage(resetPasswordDto.getEmail(), newPassword);
         try {
             emailSender.send(passwordMessage);
             log.info("new Password" + newPassword);

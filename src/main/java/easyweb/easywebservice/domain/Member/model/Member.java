@@ -15,14 +15,10 @@ public class Member extends MemberBase {
     private Boolean deleted;
     private String userName;
 
-    private String nickName;
-
-
     @Builder
-    public Member(Long id, String email, String password, Authority authority, UserLoginType userLoginType, String userName, String nickName, Boolean deleted) {
+    public Member(Long id, String email, String password, Authority authority, UserLoginType userLoginType, String userName, Boolean deleted) {
         super(id, email, password, authority, userLoginType);
         this.userName = userName;
-        this.nickName = nickName;
         this.deleted = deleted;
     }
 
@@ -34,12 +30,6 @@ public class Member extends MemberBase {
 
     public void updatePassword(String newPassword) {
         super.updatePassword(newPassword);
-    }
-
-
-
-    public void updateNickname(String nickName) {
-        this.nickName = nickName;
     }
 
 
