@@ -17,6 +17,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,6 +35,7 @@ public class MemerAuthController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "멤버 회원가입 성공시", content = @Content(schema = @Schema(implementation = StringApiResult.class)))
     })
+    @PostMapping(name = "/signup")
     public ResponseEntity<StringApiResult> signUp(@RequestBody SignUpDto signUpDto) {
         return ResponseEntity.ok(authService.signUp(signUpDto));
     }
@@ -42,6 +44,7 @@ public class MemerAuthController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "멤버 이메일 중복 조회시", content = @Content(schema = @Schema(implementation = BooleanApiResult.class)))
     })
+    @PostMapping(name = "/email/exists")
     public ResponseEntity<BooleanApiResult> checkEmailExistence(@RequestBody EmailExistenceDto emailExistenceDto) {
         return ResponseEntity.ok(authService.checkEmailExistence(emailExistenceDto));
     }
@@ -50,6 +53,7 @@ public class MemerAuthController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "로그인 성공시", content = @Content(schema = @Schema(implementation = LoginResult.class)))
     })
+    @PostMapping(name = "/login")
     public ResponseEntity<LoginResult> login(@RequestBody LoginDto loginDto) {
         return ResponseEntity.ok(authService.login(loginDto));
     }
