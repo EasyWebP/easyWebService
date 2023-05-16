@@ -55,10 +55,19 @@ public class MemberDTO {
     @NoArgsConstructor
     @Getter
     public static class LoginResult {
-
+        @Schema(description = "멤버 정보")
+        private MemberInfo info;
     }
 
 
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
+    public static class MemberInfo {
+        @Schema(description = "멤버 아이디")
+        private Long id;
+    }
 
     @Builder
     @AllArgsConstructor
