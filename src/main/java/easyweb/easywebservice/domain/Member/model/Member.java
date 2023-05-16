@@ -14,11 +14,12 @@ import java.util.List;
 public class Member extends MemberBase {
     private Boolean deleted;
     private String userName;
-
+    private String nickName;
     @Builder
-    public Member(Long id, String email, String password, Authority authority, UserLoginType userLoginType, String userName, Boolean deleted) {
+    public Member(Long id, String email, String password, Authority authority, UserLoginType userLoginType, String userName, String nickName, Boolean deleted) {
         super(id, email, password, authority, userLoginType);
         this.userName = userName;
+        this.nickName = nickName;
         this.deleted = deleted;
     }
 
@@ -36,4 +37,7 @@ public class Member extends MemberBase {
     public void updateUserName(String userName) {
         this.userName = userName;
     }
+
+    public void updateNickName(String nickName) {
+        this.nickName = nickName;}
 }
