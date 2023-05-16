@@ -3,6 +3,7 @@ package easyweb.easywebservice.domain.Member.application;
 import easyweb.easywebservice.domain.Member.dto.MemberDTO;
 import easyweb.easywebservice.domain.Member.dto.MemberDTO.CodeConfirmDto;
 import easyweb.easywebservice.domain.Member.dto.MemberDTO.EmailConfirmCodeDto;
+import easyweb.easywebservice.domain.Member.exception.EmailCertificationExpireException;
 import easyweb.easywebservice.domain.Member.exception.MemberNotFoundByEmail;
 import easyweb.easywebservice.domain.Member.model.Member;
 import easyweb.easywebservice.domain.Member.repository.MemberRepository;
