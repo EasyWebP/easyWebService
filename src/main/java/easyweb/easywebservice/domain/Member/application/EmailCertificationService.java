@@ -114,7 +114,7 @@ public class EmailCertificationService {
                     </tbody>
                 </table>""";
         mimeMessage.setText(msg, "utf-8", "html");
-        mimeMessage.setFrom(new InternetAddress("with_drone@naver.com", "WithDrone_admin"));
+        mimeMessage.setFrom(new InternetAddress("uliga_dev_team@naver.com", "ULIGA_admin"));
         return mimeMessage;
     }
 
@@ -251,7 +251,7 @@ public class EmailCertificationService {
                     </tbody>
                 </table>""";
         mimeMessage.setText(msg, "utf-8", "html");
-        mimeMessage.setFrom(new InternetAddress("with_drone@naver.com", "WithDrone_admin"));
+        mimeMessage.setFrom(new InternetAddress("uliga_dev_team@naver.com", "ULIGA_admin"));
         return mimeMessage;
     }
 

@@ -2,7 +2,6 @@ package easyweb.easywebservice.domain.Member.api;
 
 import easyweb.easywebservice.domain.Member.application.AuthService;
 import easyweb.easywebservice.domain.Member.application.EmailCertificationService;
-import easyweb.easywebservice.domain.Member.dto.MemberDTO;
 import easyweb.easywebservice.domain.Member.dto.MemberDTO.*;
 import easyweb.easywebservice.domain.common.dto.CommonDto.BooleanApiResult;
 import easyweb.easywebservice.domain.common.dto.CommonDto.StringApiResult;
@@ -22,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/auth")
-public class MemerAuthController {
+public class MemberAuthController {
     private final AuthService authService;
     private final EmailCertificationService emailCertificationService;
 
