@@ -35,7 +35,7 @@ public class MemerAuthController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "멤버 회원가입 성공시", content = @Content(schema = @Schema(implementation = StringApiResult.class)))
     })
-    @PostMapping(name = "/signup")
+    @PostMapping(value = "/signup")
     public ResponseEntity<StringApiResult> signUp(@RequestBody SignUpDto signUpDto) {
         return ResponseEntity.ok(authService.signUp(signUpDto));
     }
@@ -44,7 +44,7 @@ public class MemerAuthController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "멤버 이메일 중복 조회시", content = @Content(schema = @Schema(implementation = BooleanApiResult.class)))
     })
-    @PostMapping(name = "/email/exists")
+    @PostMapping(value = "/email/exists")
     public ResponseEntity<BooleanApiResult> checkEmailExistence(@RequestBody EmailExistenceDto emailExistenceDto) {
         return ResponseEntity.ok(authService.checkEmailExistence(emailExistenceDto));
     }
@@ -53,7 +53,7 @@ public class MemerAuthController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "로그인 성공시", content = @Content(schema = @Schema(implementation = LoginResult.class)))
     })
-    @PostMapping(name = "/login")
+    @PostMapping(value = "/login")
     public ResponseEntity<LoginResult> login(@RequestBody LoginDto loginDto) {
         return ResponseEntity.ok(authService.login(loginDto));
     }
