@@ -13,13 +13,13 @@ import java.util.List;
 @NoArgsConstructor
 public class Member extends MemberBase {
     private Boolean deleted;
-    private String userName;
-    private String nickName;
+    private String username;
+    private String nickname;
     @Builder
     public Member(Long id, String email, String password, Authority authority, UserLoginType userLoginType, String userName, String nickName, Boolean deleted) {
         super(id, email, password, authority, userLoginType);
-        this.userName = userName;
-        this.nickName = nickName;
+        this.username = userName;
+        this.nickname = nickName;
         this.deleted = deleted;
     }
 
@@ -35,9 +35,9 @@ public class Member extends MemberBase {
 
 
     public void updateUserName(String userName) {
-        this.userName = userName;
+        this.username = userName;
     }
 
     public void updateNickName(String nickName) {
-        this.nickName = nickName;}
+        this.nickname = nickName;}
 }

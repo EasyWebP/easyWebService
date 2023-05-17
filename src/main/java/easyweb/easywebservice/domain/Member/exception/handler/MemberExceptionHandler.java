@@ -1,6 +1,7 @@
 package easyweb.easywebservice.domain.Member.exception.handler;
 
 import easyweb.easywebservice.domain.Member.exception.EmailCertificationExpireException;
+import easyweb.easywebservice.domain.Member.exception.MemberExistsWithEmailException;
 import easyweb.easywebservice.domain.Member.exception.MemberNotFoundByEmail;
 import easyweb.easywebservice.global.error.response.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +36,19 @@ public class MemberExceptionHandler {
                         .message(ex.getMessage())
                         .errorCode(409L).build(),
                 HttpStatus.CONFLICT
+        );
+    }
+
+    @ExceptionHandler(MemberExistsWithEmailException.class)
+    protected final ResponseEntity<ErrorResponse> handleMemberExistsWithEmailException(
+            MemberExistsWithEmailException ex, WebRequest request
+    ) {
+        log.info("이메일로 멤버가 존재");
+        return new ResponseEntity<>(
+                ErrorResponse.builder()
+                        .message(ex.getMessage())
+                        .errorCode(409L)
+                        .build(), HttpStatus.CONFLICT
         );
     }
 }
