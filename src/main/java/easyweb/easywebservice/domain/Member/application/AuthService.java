@@ -9,6 +9,9 @@ import easyweb.easywebservice.domain.Member.exception.MemberExistsWithEmailExcep
 import easyweb.easywebservice.domain.Member.model.Member;
 import easyweb.easywebservice.domain.Member.repository.MemberRepository;
 import easyweb.easywebservice.domain.Token.dto.TokenDTO;
+import easyweb.easywebservice.domain.Token.dto.TokenDTO.TokenInfoDTO;
+import easyweb.easywebservice.domain.Token.exception.ExpireRefreshTokenException;
+import easyweb.easywebservice.domain.Token.exception.InvalidRefreshTokenException;
 import easyweb.easywebservice.domain.common.dto.CommonDto;
 import easyweb.easywebservice.domain.common.dto.CommonDto.BooleanApiResult;
 import easyweb.easywebservice.domain.common.dto.CommonDto.StringApiResult;
@@ -77,7 +80,7 @@ public class AuthService {
 
         Authentication authenticate = authenticationManagerBuilder.getObject().authenticate(usernamePasswordAuthenticationToken);
 
-        TokenDTO.TokenInfoDTO tokenInfoDTO = jwtTokenProvider.generateTokenDto(authenticate);
+        TokenInfoDTO tokenInfoDTO = jwtTokenProvider.generateTokenDto(authenticate);
         log.info("로그인 API 중 토큰 생성 로직 실행");
         ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
         valueOperations.set(authenticate.getName(), tokenInfoDTO.getRefreshToken());
@@ -87,6 +90,44 @@ public class AuthService {
                 .memberInfo(memberRepository.findMemberInfoById(Long.parseLong(authenticate.getName())))
                 .tokenInfo(tokenInfoDTO.toTokenIssueDTO())
                 .build();
+    }
+
+    /**
+     * 토큰 재발급 메서드
+     * @param reissueRequest 재발급 요청
+     * @return 토큰 재발급 결과
+     */
+    @Transactional
+    public TokenDTO.TokenIssueDTO reissue(TokenDTO.ReissueRequest reissueRequest) {
+
+        String accessToken = reissueRequest.getToken();
+
+        log.info("access : " + accessToken);
+        ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
+        // Access Token에서 멤버 아이디 가져오기
+        Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
+        String refreshByAccess = valueOperations.get(authentication.getName());
+        if (refreshByAccess == null) {
+            log.info("토큰 재발급 API 중 리프레쉬 만료 확인");
+            throw new ExpireRefreshTokenException();
+        }
+        // refresh token 검증
+        if (!jwtTokenProvider.validateToken(refreshByAccess)) {
+            log.info("토큰 재발급 API 중 유효하지 않은 리프레쉬 확인");
+            throw new InvalidRefreshTokenException();
+        }
+
+
+        // 새로운 토큰 생성
+        TokenInfoDTO tokenInfoDTO = jwtTokenProvider.generateTokenDto(authentication);
+        // 저장소 정보 업데이트
+        log.info("토큰 재발급 성공후 레디스에 값 저장");
+        valueOperations.set(authentication.getName(), tokenInfoDTO.getRefreshToken());
+        redisTemplate.expire(authentication.getName(), REFRESH_TOKEN_EXPIRE_TIME, TimeUnit.MILLISECONDS);
+
+
+        // 토큰 발급
+        return tokenInfoDTO.toTokenIssueDTO();
     }
 }
 

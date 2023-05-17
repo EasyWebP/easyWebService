@@ -3,8 +3,12 @@ package easyweb.easywebservice.domain.Member.api;
 import easyweb.easywebservice.domain.Member.application.AuthService;
 import easyweb.easywebservice.domain.Member.application.EmailCertificationService;
 import easyweb.easywebservice.domain.Member.dto.MemberDTO.*;
+import easyweb.easywebservice.domain.Token.dto.TokenDTO;
+import easyweb.easywebservice.domain.Token.dto.TokenDTO.ReissueRequest;
+import easyweb.easywebservice.domain.Token.dto.TokenDTO.TokenIssueDTO;
 import easyweb.easywebservice.domain.common.dto.CommonDto.BooleanApiResult;
 import easyweb.easywebservice.domain.common.dto.CommonDto.StringApiResult;
+import easyweb.easywebservice.global.error.response.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -71,6 +75,17 @@ public class MemberAuthController {
     public ResponseEntity<CodeConfirmDto> memberEmailCertificateCheck(@RequestBody EmailConfirmCodeDto emailConfirmCodeDto) {
 
         return ResponseEntity.ok(emailCertificationService.confirmCode(emailConfirmCodeDto));
+    }
+
+    @Operation(summary = "토큰 재발급 요청 API", description = "토큰 재발급시 호출하는 API 입니다")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "토큰 재발급 성공", content = @Content(schema = @Schema(implementation = TokenIssueDTO.class))),
+            @ApiResponse(responseCode = "401", description = "토큰 재발급 실패, 만료된 리프레쉬", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
+    @PostMapping(value = "/reissue")
+    public ResponseEntity<TokenIssueDTO> reissue(@RequestBody ReissueRequest reissueRequest) {
+
+        return ResponseEntity.ok(authService.reissue(reissueRequest));
     }
 
     @Operation(summary = "로그아웃시 리다이렉트 API", description = "로그아웃시 호출되는 API 입니다")
