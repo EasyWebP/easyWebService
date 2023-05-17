@@ -61,12 +61,12 @@ public class AuthService {
 
     /**
      * 회원가입시 이메일 중복 여부 확인 메서드
-     * @param emailExistenceDto 중복확인할 이메일
+     * @param email 중복확인할 이메일
      * @return 중복 확인 결과
      */
     @Transactional
-    public BooleanApiResult checkEmailExistence(EmailExistenceDto emailExistenceDto) {
-        return new BooleanApiResult(memberRepository.existsByEmailAndDeleted(emailExistenceDto.getEmail(), false));
+    public BooleanApiResult checkEmailExistence(String email) {
+        return new BooleanApiResult(memberRepository.existsByEmailAndDeleted(email, false));
     }
 
     /**

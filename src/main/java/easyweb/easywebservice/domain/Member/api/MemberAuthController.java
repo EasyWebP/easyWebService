@@ -42,9 +42,9 @@ public class MemberAuthController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "멤버 이메일 중복 조회시", content = @Content(schema = @Schema(implementation = BooleanApiResult.class)))
     })
-    @PostMapping(value = "/email/exists")
-    public ResponseEntity<BooleanApiResult> checkEmailExistence(@RequestBody EmailExistenceDto emailExistenceDto) {
-        return ResponseEntity.ok(authService.checkEmailExistence(emailExistenceDto));
+    @GetMapping(value = "/email/exists/{email}")
+    public ResponseEntity<BooleanApiResult> checkEmailExistence(@PathVariable String email) {
+        return ResponseEntity.ok(authService.checkEmailExistence(email));
     }
 
     @Operation(summary = "로그인", description = "로그인 API 입니다")
