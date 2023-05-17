@@ -72,4 +72,13 @@ public class MemberAuthController {
 
         return ResponseEntity.ok(emailCertificationService.confirmCode(emailConfirmCodeDto));
     }
+
+    @Operation(summary = "로그아웃시 리다이렉트 API", description = "로그아웃시 호출되는 API 입니다")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "로그아웃 성공")
+    })
+    @GetMapping(value = "/logout-redirect")
+    public ResponseEntity<StringApiResult> logoutRedirect() {
+        return ResponseEntity.ok(new StringApiResult("LOGOUT"));
+    }
 }
