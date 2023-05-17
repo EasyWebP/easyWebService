@@ -87,7 +87,7 @@ public class AuthService {
         redisTemplate.expire(authenticate.getName(), REFRESH_TOKEN_EXPIRE_TIME, TimeUnit.MILLISECONDS);
 
         return LoginResult.builder()
-                .memberInfo(memberRepository.findMemberInfoById(Long.parseLong(authenticate.getName())))
+                .memberInfo(memberRepository.findMemberInfoById(Long.parseLong(authenticate.getName())).get())
                 .tokenInfo(tokenInfoDTO.toTokenIssueDTO())
                 .build();
     }

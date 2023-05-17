@@ -14,5 +14,5 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     boolean existsByEmailAndDeleted(String email, Boolean deleted);
     @Query("SELECT NEW easyweb.easywebservice.domain.Member.dto.NativeQ.MemberInfoQ(m.id, m.username, m.nickname, m.email) FROM Member m WHERE m.id=:id")
-    MemberInfoQ findMemberInfoById(@Param("id") Long id);
+    Optional<MemberInfoQ> findMemberInfoById(@Param("id") Long id);
 }
