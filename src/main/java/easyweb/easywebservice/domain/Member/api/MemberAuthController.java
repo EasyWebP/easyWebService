@@ -47,13 +47,21 @@ public class MemberAuthController {
         return ResponseEntity.ok(authService.checkEmailExistence(email));
     }
 
+    @Operation(summary = "멤버 닉네임 중복 확인", description = "멤버 닉네임 중복 확인 API입니다")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "멤버 닉네임 중복 조회시", content = @Content(schema = @Schema(implementation = BooleanApiResult.class)))
+    })
+    @GetMapping(value = "/nickname/exists/{nickname}")
+    public ResponseEntity<BooleanApiResult> checkNicknameExistence(@PathVariable String nickname) {
+        return ResponseEntity.ok(authService.checkNicknameExistence(nickname));
+    }
+
     @Operation(summary = "로그인", description = "로그인 API 입니다")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "로그인 성공시", content = @Content(schema = @Schema(implementation = LoginResult.class)))
     })
     @PostMapping(value = "/login")
     public ResponseEntity<LoginResult> login(@RequestBody LoginDto loginDto) {
-
         return ResponseEntity.ok(authService.login(loginDto));
     }
 
