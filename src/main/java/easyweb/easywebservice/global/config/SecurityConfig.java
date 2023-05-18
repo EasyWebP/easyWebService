@@ -81,12 +81,6 @@ public class SecurityConfig {
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/logout-redirect").permitAll()
                         .requestMatchers("/member/**").hasRole("USER")
-                        .requestMatchers("/post/**").authenticated()
-                        .requestMatchers("/accountBook/**").authenticated()
-                        .requestMatchers("/budget/**").authenticated()
-                        .requestMatchers("/record/**").authenticated()
-                        .requestMatchers("/income/**").authenticated()
-                        .requestMatchers("/schedule/**").authenticated()
                         .requestMatchers("/swagger-ui/**").permitAll()
                         .requestMatchers("/v1/api-docs/**").permitAll()
                 );
