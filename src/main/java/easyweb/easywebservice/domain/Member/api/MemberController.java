@@ -27,7 +27,7 @@ import static easyweb.easywebservice.domain.Member.dto.MemberDTO.*;
 public class MemberController {
     private final MemberService memberService;
 
-    @Operation(description = "로그인한 멤버 정보 조회")
+    @Operation(summary = "로그인한 멤버 정보 조회",description = "로그인한 멤버 정보 조회 API 입니다")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = MemberInfoQ.class)))
     })
@@ -38,7 +38,7 @@ public class MemberController {
         return ResponseEntity.ok(memberService.getLoginMemberInfo(currentMemberId));
     }
 
-    @Operation(description = "멤버 정보 업데이트")
+    @Operation(summary = "멤버 정보 업데이트", description = "멤버 정보 업데이트 API 입니다")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "업데이트 성공시", content = @Content(schema = @Schema(implementation = MemberInfoQ.class)))
     })
