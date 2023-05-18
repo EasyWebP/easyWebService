@@ -69,6 +69,11 @@ public class AuthService {
         return new BooleanApiResult(memberRepository.existsByEmailAndDeleted(email, false));
     }
 
+    @Transactional
+    public BooleanApiResult checkNicknameExistence(String nickname) {
+        return new BooleanApiResult(memberRepository.existsByNicknameAndDeleted(nickname, false));
+    }
+
     /**
      * 로그인 메서드
      * @param loginDto 로그인할 아이디 비밀번호
