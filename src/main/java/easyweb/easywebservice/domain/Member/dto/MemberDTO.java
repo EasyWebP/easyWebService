@@ -141,4 +141,13 @@ public class MemberDTO {
         private String code;
     }
 
+
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
+    @Schema(description = "이메일 인증 코드 확인 요청")
+    public static class MemberUpdateDto {
+        private String nickname;
+    }
 }
