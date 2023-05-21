@@ -36,7 +36,10 @@ public class ProductDTO {
     @Getter
     @Schema(description = "상품 생성 요청 dto")
     public static class ProductCreateDto {
-
+        @Schema(description = "제품명")
+        private String name;
+        @Schema(description = "제품 가격")
+        private int price;
     }
 
     @Builder
@@ -45,7 +48,10 @@ public class ProductDTO {
     @Getter
     @Schema(description = "상품 생성 요청 dto")
     public static class ProductInfoDto {
-
+        @Schema(description = "제품명")
+        private String name;
+        @Schema(description = "제품 가격")
+        private int price;
     }
 
     @Builder
@@ -54,7 +60,10 @@ public class ProductDTO {
     @Getter
     @Schema(description = "상품 업데이트 요청 dto")
     public static class ProductUpdateDto {
-
+        @Schema(description = "제품명")
+        private String name;
+        @Schema(description = "제품 가격")
+        private int price;
     }
 
     @Builder
@@ -63,6 +72,7 @@ public class ProductDTO {
     @Getter
     @Schema(description = "상품 삭제 요청 dto")
     public static class ProductDeleteDto {
-
+        @Schema(description = "제품 아이디")
+        private Long id;
     }
 }
