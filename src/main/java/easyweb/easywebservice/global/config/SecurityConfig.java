@@ -75,7 +75,7 @@ public class SecurityConfig {
                                                 .requestMatchers(HttpMethod.OPTIONS, "**").permitAll()
                                                 .requestMatchers("/actuator/**").authenticated()
                                                 .requestMatchers("/oauth2/**").permitAll()
-                                                .requestMatchers("/products/**").permitAll()
+                                                .requestMatchers("/products/**").authenticated()
                                                 .requestMatchers("/login/**").permitAll()
                                                 .requestMatchers("/auth/**").permitAll()
                                                 .requestMatchers("/logout-redirect").permitAll()
