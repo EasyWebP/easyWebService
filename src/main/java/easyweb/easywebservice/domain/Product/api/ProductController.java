@@ -56,23 +56,16 @@ public class ProductController {
             @RequestBody ProductUpdateDTO productUpdateDTO) {
         Product updatedProduct = productService.updateProduct(id, productUpdateDTO);
 
-        if (updatedProduct != null) {
-            return new ResponseEntity<Product>(updatedProduct, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<Product>(updatedProduct, HttpStatus.OK);
     }
 
     // 제품 삭제
     @Operation(summary = "제품 삭제 API", description = "제품 삭제 API 입니다")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteProduct(@PathVariable Long id) {
-        boolean isDeleted = productService.deleteProduct(id);
-        if (isDeleted) {
-            return new ResponseEntity<>("Product deleted successfully.", HttpStatus.NO_CONTENT);
-        } else {
-            return new ResponseEntity<>("Product not found.", HttpStatus.NOT_FOUND);
-        }
+        productService.deleteProduct(id);
+
+        return new ResponseEntity<>("Product deleted successfully.", HttpStatus.NO_CONTENT);
     }
 
     // 제품 조회 products?page=0&size=10
