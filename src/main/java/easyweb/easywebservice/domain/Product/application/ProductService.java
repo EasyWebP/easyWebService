@@ -21,6 +21,10 @@ public class ProductService {
     private final ProductImageRepository productImageRepository;
 
     public Product addProduct(ProductDTO productDTO) {
+        /*
+        productImage 저장되는 부분이 없어여
+
+         */
         Product product = productDTO.toEntity();
         return productRepository.save(product);
     }
@@ -28,7 +32,11 @@ public class ProductService {
     public Product updateProduct(Long id, ProductDTO productDTO) {
         Product existingProduct = productRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Product does not exist"));
+        /*
+        여기서는 existingProduct null 체크 안해줘도돼
 
+        null이면 위에서 선언한 IllegalArugmentException이 터질거야
+         */
         if (existingProduct != null) {
             if (productDTO.getName() != null) {
                 existingProduct.updateName(productDTO.getName());
@@ -54,15 +62,19 @@ public class ProductService {
                             existingProductImage.updateImagePath(productImageDTO.getImagePath());
                         }
                         if (productImageDTO.getDetailImageUrl1() != null) {
-                            existingProductImage.updatedetailImageUrl1(productImageDTO.getDetailImageUrl1());
+                            existingProductImage.updateDetailImageUrl1(productImageDTO.getDetailImageUrl1());
                         }
                         if (productImageDTO.getDetailImageUrl2() != null) {
-                            existingProductImage.updatedetailImageUrl2(productImageDTO.getDetailImageUrl2());
+                            existingProductImage.updateDetailImageUrl2(productImageDTO.getDetailImageUrl2());
                         }
                     }
                 }
             }
+            /*
+            JPA에서는 가져온 엔티티의 값을 업데이트하고 나서 또 저장 안해줘도돼
 
+            알아서 변경된 값 감지해서 데이터베이스 값 변경해줘
+             */
             return productRepository.save(existingProduct);
         }
 

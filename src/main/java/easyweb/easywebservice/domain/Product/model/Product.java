@@ -1,14 +1,9 @@
 package easyweb.easywebservice.domain.Product.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,9 +20,17 @@ public class Product {
     private int price;
     private String manufacturer;
     private String shippingCompany;
+    /*
+    아래처럼 어레이리스트 초기화하고, fetchType = FetchType.LAZY 꼭 써줘야돼
+    오 근데 이렇게 쓰면 @OneToMany를 쓸 이유가 있을까?
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    private List<ProductImage> productImages;
+    ProductImage안에
+    상품 메인 사진, 상품 세부 이미지 2개 저장할 수 있는데
+
+    이런 구조면 Product하나가 여러개의 ProductImage를 가질 수 있을 듯??
+     */
+    @OneToMany(mappedBy = "product",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<ProductImage> productImages = new ArrayList<>();
 
     @Builder
     public Product(String name, int price, String manufacturer, String shippingCompany,

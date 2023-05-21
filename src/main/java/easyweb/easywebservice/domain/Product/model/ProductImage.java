@@ -40,11 +40,11 @@ public class ProductImage {
         this.imagePath = imagePath;
     }
 
-    public void updatedetailImageUrl1(String detailImageUrl1) {
+    public void updateDetailImageUrl1(String detailImageUrl1) {
         this.detailImageUrl1 = detailImageUrl1;
     }
 
-    public void updatedetailImageUrl2(String detailImageUrl2) {
+    public void updateDetailImageUrl2(String detailImageUrl2) {
         this.detailImageUrl2 = detailImageUrl2;
     }
 }

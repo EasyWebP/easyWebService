@@ -22,6 +22,9 @@ public class ProductDTO {
     private String manufacturer;
     @Schema(description = "배송사")
     private String shippingCompany;
+    /*
+    이것도 static 클래스로 바꿔줘
+     */
     @Schema(description = "제품 사진")
     private List<ProductImageDTO> productImages;
 

@@ -55,6 +55,7 @@ public class ProductController {
     })
     @PostMapping
     public ResponseEntity<Product> addProduct(@RequestBody ProductDTO productDTO) {
+        // 여기 데이터 받는 DTO ProductCreateDto로 바꿔줘
         Product createdProduct = productService.addProduct(productDTO);
         return new ResponseEntity<>(createdProduct, HttpStatus.CREATED);
     }
@@ -66,6 +67,7 @@ public class ProductController {
     })
     @PutMapping("/{id}")
     public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody ProductDTO productDTO) {
+        // 여기 데이터 받는 DTO ProductUpdateDto로 바꿔줘
         Product updatedProduct = productService.updateProduct(id, productDTO);
 
         if (updatedProduct != null) {
@@ -83,6 +85,7 @@ public class ProductController {
     @Operation(summary = "제품 삭제 API", description = "제품 삭제 API 입니다")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
+        // 여기 데이터 받는 DTO ProductDeleteDto로 바꿔줘
         boolean isDeleted = productService.deleteProduct(id);
         if (isDeleted) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
