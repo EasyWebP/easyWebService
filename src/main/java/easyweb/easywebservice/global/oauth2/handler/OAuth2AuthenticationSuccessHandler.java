@@ -75,12 +75,14 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                         .queryParam("token", tokenDto.getAccessToken())
                         .queryParam("email", member.getEmail())
                         .queryParam("created", true)
+                        .queryParam("nickname", "null")
                         .build();
             } else {
                 uriComponents = UriComponentsBuilder.fromUriString(targetUrl)
                         .queryParam("token", tokenDto.getAccessToken())
                         .queryParam("email", member.getEmail())
                         .queryParam("created", false)
+                        .queryParam("nickname", member.getNickname())
                         .build();
             }
             return uriComponents.toUriString();
