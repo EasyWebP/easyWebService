@@ -13,6 +13,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 public class Product {
+    /*
+    추가해야될 데이터
+    제조사
+    제품 사진
+    배송사
+    제품 상세 정보용 사진 2장
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_id")
