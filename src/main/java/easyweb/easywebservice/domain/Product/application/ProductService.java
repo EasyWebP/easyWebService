@@ -14,7 +14,9 @@ import org.springframework.stereotype.Service;
 import easyweb.easywebservice.domain.Product.dto.ProductDTO.ProductCreateDTO;
 import easyweb.easywebservice.domain.Product.dto.ProductDTO.ProductUpdateDTO;
 import easyweb.easywebservice.domain.Product.model.Product;
+import easyweb.easywebservice.domain.Product.model.Product.ProductStatus;
 import easyweb.easywebservice.domain.Product.repository.ProductRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -23,11 +25,13 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
 
+    @Transactional
     public Product addProduct(ProductCreateDTO productCreateDTO) {
         Product product = productCreateDTO.toEntity();
         return productRepository.save(product);
     }
 
+    @Transactional
     public Product updateProduct(Long id, ProductUpdateDTO productUpdateDTO) {
         Product existingProduct = productRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Product does not exist"));
@@ -57,12 +61,25 @@ public class ProductService {
 //            existingProduct.updateCategory(productUpdateDTO.getCategory());
 //        }
         if (productUpdateDTO.getStatus() != null) {
-            existingProduct.updateStatus(productUpdateDTO.getStatus());
+            ProductStatus status = null;
+            for (ProductStatus value : ProductStatus.values()) {
+                if (value == productUpdateDTO.getStatus()) {
+                    status = value;
+                    break;
+                }
+            }
+
+            if (status != null) {
+                existingProduct.updateStatus(status);
+            } else {
+                throw new IllegalArgumentException("Invalid status value");
+            }
         }
 
         return existingProduct;
     }
 
+    @Transactional
     public boolean deleteProduct(Long id) {
         Product existingProduct = productRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Product does not exist"));
@@ -75,6 +92,7 @@ public class ProductService {
         return false;
     }
 
+    @Transactional
     public Page<ProductInfoDto> getAllProducts(String status, String like, String price, String desc, String asc, Pageable pageable) {
         HashMap<String, Object> map = new HashMap<>();
         map.put("status", status);
