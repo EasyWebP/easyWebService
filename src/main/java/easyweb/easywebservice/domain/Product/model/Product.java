@@ -1,8 +1,5 @@
 package easyweb.easywebservice.domain.Product.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,26 +17,33 @@ public class Product {
     private int price;
     private String manufacturer;
     private String shippingCompany;
-    /*
-    아래처럼 어레이리스트 초기화하고, fetchType = FetchType.LAZY 꼭 써줘야돼
-    오 근데 이렇게 쓰면 @OneToMany를 쓸 이유가 있을까?
+    private String imagePath;
+    private String detailImageUrl1;
+    private String detailImageUrl2;
+    private boolean liked = false;
+    private String category;
+    @Enumerated(EnumType.STRING)
+    private ProductStatus status;
 
-    ProductImage안에
-    상품 메인 사진, 상품 세부 이미지 2개 저장할 수 있는데
-
-    이런 구조면 Product하나가 여러개의 ProductImage를 가질 수 있을 듯??
-     */
-    @OneToMany(mappedBy = "product",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<ProductImage> productImages = new ArrayList<>();
+    public enum ProductStatus {
+        SALE_ONLY,
+        SALE_AND_RENTAL,
+        RENTAL_ONLY
+    }
 
     @Builder
-    public Product(String name, int price, String manufacturer, String shippingCompany,
-            List<ProductImage> productImages) {
+    public Product(String name, int price, String manufacturer, String shippingCompany, String imagePath,
+            String detailImageUrl1, String detailImageUrl2, boolean liked, String category, ProductStatus status) {
         this.name = name;
         this.price = price;
         this.manufacturer = manufacturer;
         this.shippingCompany = shippingCompany;
-        this.productImages = productImages;
+        this.imagePath = imagePath;
+        this.detailImageUrl1 = detailImageUrl1;
+        this.detailImageUrl2 = detailImageUrl2;
+        this.liked = liked;
+        this.category = category;
+        this.status = status;
     }
 
     public void updateName(String name) {
@@ -56,5 +60,25 @@ public class Product {
 
     public void updateShippingCompany(String shippingCompany) {
         this.shippingCompany = shippingCompany;
+    }
+
+    public void updateImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
+
+    public void updateDetailImageUrl1(String detailImageUrl1) {
+        this.detailImageUrl1 = detailImageUrl1;
+    }
+
+    public void updateDetailImageUrl2(String detailImageUrl2) {
+        this.detailImageUrl2 = detailImageUrl2;
+    }
+
+    public void updateCategory(String category) {
+        this.category = category;
+    }
+
+    public void updateStatus(ProductStatus status) {
+        this.status = status;
     }
 }
