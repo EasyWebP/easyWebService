@@ -34,7 +34,8 @@ public class ProductDTO {
         @Schema(description = "카테고리")
         private String category;
         @Schema(description = "판매 상품 여부")
-        private ProductStatus status;
+        @Builder.Default
+        private ProductStatus status = ProductStatus.SALE_AND_RENTAL;
 
         public Product toEntity() {
             return Product.builder()

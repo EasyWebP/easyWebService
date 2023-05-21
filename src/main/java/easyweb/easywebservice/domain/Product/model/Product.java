@@ -20,7 +20,7 @@ public class Product {
     private String imagePath;
     private String detailImageUrl1;
     private String detailImageUrl2;
-    private boolean liked = false;
+    private boolean liked;
     private String category;
     @Enumerated(EnumType.STRING)
     private ProductStatus status;
