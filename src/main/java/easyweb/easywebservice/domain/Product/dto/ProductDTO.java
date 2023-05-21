@@ -1,6 +1,10 @@
 package easyweb.easywebservice.domain.Product.dto;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import easyweb.easywebservice.domain.Product.model.Product;
+import easyweb.easywebservice.domain.Product.model.ProductImage;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,23 +14,38 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class ProductDTO {
-    // DTO로 id를 전달받지 않으니까 이건 빼도돼여
-    private Long id;
     @Schema(description = "제품명")
     private String name;
     @Schema(description = "제품 가격")
     private int price;
+    @Schema(description = "제조사")
+    private String manufacturer;
+    @Schema(description = "배송사")
+    private String shippingCompany;
+    @Schema(description = "제품 사진")
+    private List<ProductImageDTO> productImages;
 
     @Builder
-    public ProductDTO(String name, int price) {
+    public ProductDTO(String name, int price, String manufacturer, String shippingCompany,
+            List<ProductImageDTO> productImages) {
         this.name = name;
         this.price = price;
+        this.manufacturer = manufacturer;
+        this.shippingCompany = shippingCompany;
+        this.productImages = productImages;
     }
 
     public Product toEntity() {
+        List<ProductImage> productImageEntities = productImages.stream()
+                .map(ProductImageDTO::toEntity)
+                .collect(Collectors.toList());
+
         return Product.builder()
                 .name(this.name)
                 .price(this.price)
+                .manufacturer(this.manufacturer)
+                .shippingCompany(this.shippingCompany)
+                .productImages(productImageEntities)
                 .build();
     }
 
