@@ -1,5 +1,7 @@
 package easyweb.easywebservice.domain.Product.api;
 
+import easyweb.easywebservice.domain.Product.dto.ProductDTO;
+import easyweb.easywebservice.domain.Product.dto.ProductInfoDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -81,9 +83,8 @@ public class ProductController {
             @ApiResponse(responseCode = "200", description = "제품 조회 성공시", content = @Content(schema = @Schema(implementation = Product.class)))
     })
     @GetMapping
-    public Page<Product> getAllProducts(@RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return productService.getAllProducts(pageable);
+    public Page<ProductInfoDto> getAllProducts(@RequestParam(value = "status", required = false) String status, @RequestParam(value = "like", required = false) String like, @RequestParam(value = "price", required = false) String price, @RequestParam(value = "desc", required = false) String desc, @RequestParam(value = "asc", required = false) String asc, Pageable pageable) {
+
+        return productService.getAllProducts(status, like, price, desc, asc, pageable);
     }
 }

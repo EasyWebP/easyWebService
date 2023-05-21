@@ -3,10 +3,7 @@ package easyweb.easywebservice.domain.Product.dto;
 import easyweb.easywebservice.domain.Product.model.Product;
 import easyweb.easywebservice.domain.Product.model.Product.ProductStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 public class ProductDTO {
     @Builder
@@ -29,13 +26,16 @@ public class ProductDTO {
         private String detailImageUrl1;
         @Schema(description = "제품 상세 사진 Url 2")
         private String detailImageUrl2;
+        /*
+        좋아요 여부는 빠져야될 것 같아 이건 나중에 좋아요 넣고 나서 ㄱㄱ
+         */
         @Schema(description = "좋아요 여부")
         private boolean liked;
         @Schema(description = "카테고리")
         private String category;
         @Schema(description = "판매 상품 여부")
-        @Builder.Default
-        private ProductStatus status = ProductStatus.SALE_AND_RENTAL;
+//        @Builder.Default
+        private ProductStatus status;
 
         public Product toEntity() {
             return Product.builder()
@@ -46,8 +46,8 @@ public class ProductDTO {
                     .imagePath(imagePath)
                     .detailImageUrl1(detailImageUrl1)
                     .detailImageUrl2(detailImageUrl2)
-                    .liked(liked)
-                    .category(category)
+//                    .liked(liked)
+//                    .category(category)
                     .status(status)
                     .build();
         }
@@ -79,15 +79,6 @@ public class ProductDTO {
         private ProductStatus status;
     }
 
-    // @Builder
-    // @AllArgsConstructor
-    // @NoArgsConstructor
-    // @Getter
-    // @Schema(description = "상품 정보 요청 DTO")
-    // public static class ProductInfoDTO {
-    // @Schema(description = "제품명")
-    // private String name;
-    // @Schema(description = "제품 가격")
-    // private int price;
-    // }
+
+
 }

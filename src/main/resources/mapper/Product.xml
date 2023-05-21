@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="easyweb.easywebservice.domain.Product.repository.ProductMapper">
+    <select id="findProduct" parameterType="HashMap" resultType="easyweb.easywebservice.domain.Product.dto.ProductInfoDto">
+        SELECT p.product_id, p.name, p.price, p.manufacturer, p.shipping_company, p.image_path, p.detail_image_url1, p.detail_image_url2, p.status
+        FROM product p
+        WHERE p.status = #{status} ORDER BY p.price DESC
+        <choose>
+            <when test="pageSize != null and offset != null">
+                LIMIT ${pageSize}
+                OFFSET ${offset}
+            </when>
+            <when test="pageSize == null and offset != null">
+                LIMIT 20
+                OFFSET ${offset}
+            </when>
+            <when test="pageSize != null and offset == null">
+                LIMIT ${pageSize}
+            </when>
+            <otherwise>
+                LIMIT 20
+            </otherwise>
+        </choose>
+    </select>
+    <select id="countQueryForProduct" parameterType="HashMap" resultType="Long">
+        SELECT p.product_id FROM product p WHERE p.status = #{status} ORDER BY p.price DESC
+    </select>
+</mapper>

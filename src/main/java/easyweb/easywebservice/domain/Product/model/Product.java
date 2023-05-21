@@ -20,20 +20,23 @@ public class Product {
     private String imagePath;
     private String detailImageUrl1;
     private String detailImageUrl2;
-    private boolean liked;
-    private String category;
+    /*
+    좋아요랑 카테고리는 지금은 빼고 나중에 따로 엔티티 생기면 그때 ㄱㄱ
+
+     */
+//    private boolean liked = false;
+//    private String category;
     @Enumerated(EnumType.STRING)
     private ProductStatus status;
 
     public enum ProductStatus {
-        SALE_ONLY,
-        SALE_AND_RENTAL,
-        RENTAL_ONLY
+        SALE,
+        RENTAL
     }
 
     @Builder
     public Product(String name, int price, String manufacturer, String shippingCompany, String imagePath,
-            String detailImageUrl1, String detailImageUrl2, boolean liked, String category, ProductStatus status) {
+            String detailImageUrl1, String detailImageUrl2, ProductStatus status) {
         this.name = name;
         this.price = price;
         this.manufacturer = manufacturer;
@@ -41,8 +44,8 @@ public class Product {
         this.imagePath = imagePath;
         this.detailImageUrl1 = detailImageUrl1;
         this.detailImageUrl2 = detailImageUrl2;
-        this.liked = liked;
-        this.category = category;
+//        this.liked = liked;
+//        this.category = category;
         this.status = status;
     }
 
@@ -74,9 +77,9 @@ public class Product {
         this.detailImageUrl2 = detailImageUrl2;
     }
 
-    public void updateCategory(String category) {
-        this.category = category;
-    }
+//    public void updateCategory(String category) {
+//        this.category = category;
+//    }
 
     public void updateStatus(ProductStatus status) {
         this.status = status;
