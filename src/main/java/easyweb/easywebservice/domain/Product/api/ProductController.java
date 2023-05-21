@@ -76,7 +76,7 @@ public class ProductController {
             @ApiResponse(responseCode = "200", description = "제품 조회 성공시", content = @Content(schema = @Schema(implementation = Product.class)))
     })
     @GetMapping
-    public Page<ProductInfoDto> getAllProducts(@RequestParam(value = "status", required = false) String status, @RequestParam(value = "like", required = false) String like, @RequestParam(value = "price", required = false) String price, @RequestParam(value = "desc", required = false) String desc, @RequestParam(value = "asc", required = false) String asc, Pageable pageable) {
+    public Page<ProductInfoDto> getAllProducts(@RequestParam(value = "status", required = true, defaultValue = "SALE") String status, @RequestParam(value = "like", required = false) String like, @RequestParam(value = "price", required = false) String price, @RequestParam(value = "desc", required = false) String desc, @RequestParam(value = "asc", required = false) String asc, Pageable pageable) {
 
         return productService.getAllProducts(status, like, price, desc, asc, pageable);
     }
