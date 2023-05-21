@@ -1,7 +1,5 @@
 package easyweb.easywebservice.domain.Product.api;
 
-import java.util.List;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -77,6 +75,7 @@ public class ProductController {
         }
     }
 
+    // 제품 조회 products?page=0&size=10
     @Operation(summary = "제품 조회 API", description = "제품 조회 API 입니다")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "제품 조회 성공시", content = @Content(schema = @Schema(implementation = Product.class)))
