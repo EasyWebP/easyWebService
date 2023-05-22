@@ -74,6 +74,33 @@ public class ProductDTO {
         private ProductStatus status;
     }
 
-
-
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
+    @Schema(description = "상품 개별 조회 DTO")
+    public static class ProductDetailDto {
+        @Schema(description = "제품 아이디")
+        private Long id;
+        @Schema(description = "제품명")
+        private String name;
+        @Schema(description = "제품 가격")
+        private int price;
+        @Schema(description = "제조사")
+        private String manufacturer;
+        @Schema(description = "배송사")
+        private String shippingCompany;
+        @Schema(description = "제품 사진 경로")
+        private String imagePath;
+        @Schema(description = "제품 상세 사진 Url 1")
+        private String detailImageUrl1;
+        @Schema(description = "제품 상세 사진 Url 2")
+        private String detailImageUrl2;
+        @Schema(description = "카테고리")
+        private String category;
+        @Schema(description = "판매 상품 여부")
+        private ProductStatus status;
+        @Schema(description = "좋아요 여부")
+        private Boolean liked;
+    }
 }
