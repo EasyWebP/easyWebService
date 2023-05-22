@@ -37,9 +37,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         String userNameAttributeName = userRequest.getClientRegistration().getProviderDetails()
                 .getUserInfoEndpoint().getUserNameAttributeName();
         OAuth2UserInfo userInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(loginType.getType(), oAuth2User.getAttributes());
-        Optional<Member> byEmailAndDeleted = memberRepository.findByEmailAndDeleted(userInfo.getEmail(), false);
-        Member member;
-        member = byEmailAndDeleted.orElseGet(() -> createUser(userInfo, loginType));
+        Member member = memberRepository.findByEmailAndDeleted(userInfo.getEmail(), false).orElseGet(() -> createUser(userInfo, loginType));
 
         return UserPrincipal.create(member, oAuth2User.getAttributes());
 
@@ -49,14 +47,13 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     private Member createUser(OAuth2UserInfo memberInfo, UserLoginType loginType) {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encode = passwordEncoder.encode(memberInfo.getEmail());
-        Member member = Member.builder().email(memberInfo.getEmail())
+       return Member.builder().email(memberInfo.getEmail())
                 .userName(memberInfo.getName())
-//                .nickName(memberInfo.getName())
+                .nickName(memberInfo.getName())
                 .password(encode)
                 .deleted(false)
                 .userLoginType(loginType)
                 .authority(Authority.ROLE_USER)
                 .build();
-        return memberRepository.save(member);
     }
 }
