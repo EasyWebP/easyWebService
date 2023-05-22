@@ -83,13 +83,14 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                         .queryParam("token", tokenDto.getAccessToken())
                         .queryParam("email", member.getEmail())
                         .queryParam("created", false)
-                        .queryParam("nickname", member.getNickname())
+                        .queryParam("nickname", URLEncoder.encode(member.getNickname(), StandardCharsets.UTF_8))
                         .build();
 
                 valueOperations.set(authentication.getName(), tokenDto.getRefreshToken());
                 redisTemplate.expire(authentication.getName(), REFRESH_TOKEN_EXPIRE_TIME, TimeUnit.MILLISECONDS);
             }
-            return URLEncoder.encode(uriComponents.toUriString(), StandardCharsets.UTF_8);
+            return uriComponents.toUriString();
+
 
 
         } else {
@@ -97,7 +98,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                     .queryParam("token", tokenDto.getAccessToken())
                     .queryParam("email", "NULL")
                     .build();
-            return URLEncoder.encode(uriComponents.toUriString(), StandardCharsets.UTF_8);
+            return uriComponents.toUriString();
         }
 
 
