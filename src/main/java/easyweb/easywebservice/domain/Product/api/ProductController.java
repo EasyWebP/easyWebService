@@ -82,10 +82,9 @@ public class ProductController {
     public ResponseEntity<Page<ProductInfoDto>> getAllProducts(
             @RequestParam(value = "status", required = true, defaultValue = "SALE") String status,
             @RequestParam(value = "like", required = false) String like,
-            @RequestParam(value = "asc", required = false) String asc,
             @RequestParam(value = "category", required = false) String category, Pageable pageable) {
 
-        return ResponseEntity.ok(productService.getAllProducts(status, like, asc, category, pageable));
+        return ResponseEntity.ok(productService.getAllProducts(status, like, category, pageable));
     }
 
     @Operation(summary = "제품 개별 조회 API", description = "제품 개별 조회 API 구현")

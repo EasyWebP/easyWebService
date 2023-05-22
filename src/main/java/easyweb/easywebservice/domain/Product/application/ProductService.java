@@ -110,11 +110,10 @@ public class ProductService {
     }
 
     @Transactional
-    public Page<ProductInfoDto> getAllProducts(String status, String like, String asc, String category, Pageable pageable) {
+    public Page<ProductInfoDto> getAllProducts(String status, String like,  String category, Pageable pageable) {
         HashMap<String, Object> map = new HashMap<>();
         map.put("status", status);
         map.put("like", like);
-        map.put("asc", asc);
         map.put("category", category);
         map.put("offset", pageable.getOffset());
         map.put("pageSize", pageable.getPageSize());
