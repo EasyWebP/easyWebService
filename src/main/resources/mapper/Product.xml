@@ -15,45 +15,46 @@
             AND c.name = #{category}
         </if>
         GROUP BY p.product_id, p.price
-        <if test="like != null">
-            ORDER BY COUNT(l.like_id) DESC
-            <choose>
-                <when test="pageSize != null and offset != null">
-                    LIMIT ${pageSize}
-                    OFFSET ${offset}
-                </when>
-                <when test="pageSize == null and offset != null">
-                    LIMIT 20
-                    OFFSET ${offset}
-                </when>
-                <when test="pageSize != null and offset == null">
-                    LIMIT ${pageSize}
-                </when>
-                <otherwise>
-                    LIMIT 20
-                </otherwise>
-            </choose>
-        </if>
-        <if test="price != null">
-            ORDER BY p.price ASC
-            <choose>
-                <when test="pageSize != null and offset != null">
-                    LIMIT ${pageSize}
-                    OFFSET ${offset}
-                </when>
-                <when test="pageSize == null and offset != null">
-                    LIMIT 20
-                    OFFSET ${offset}
-                </when>
-                <when test="pageSize != null and offset == null">
-                    LIMIT ${pageSize}
-                </when>
-                <otherwise>
-                    LIMIT 20
-                </otherwise>
-            </choose>
-
-        </if>
+        <choose>
+            <when test="like != null">
+                ORDER BY COUNT(l.like_id) DESC
+                <choose>
+                    <when test="pageSize != null and offset != null">
+                        LIMIT ${pageSize}
+                        OFFSET ${offset}
+                    </when>
+                    <when test="pageSize == null and offset != null">
+                        LIMIT 20
+                        OFFSET ${offset}
+                    </when>
+                    <when test="pageSize != null and offset == null">
+                        LIMIT ${pageSize}
+                    </when>
+                    <otherwise>
+                        LIMIT 20
+                    </otherwise>
+                </choose>
+            </when>
+            <otherwise>
+                ORDER BY p.price ASC
+                <choose>
+                    <when test="pageSize != null and offset != null">
+                        LIMIT ${pageSize}
+                        OFFSET ${offset}
+                    </when>
+                    <when test="pageSize == null and offset != null">
+                        LIMIT 20
+                        OFFSET ${offset}
+                    </when>
+                    <when test="pageSize != null and offset == null">
+                        LIMIT ${pageSize}
+                    </when>
+                    <otherwise>
+                        LIMIT 20
+                    </otherwise>
+                </choose>
+            </otherwise>
+        </choose>
 
     </select>
     <select id="countQueryForProduct" parameterType="HashMap" resultType="Long">
