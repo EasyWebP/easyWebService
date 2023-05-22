@@ -1,7 +1,7 @@
 package easyweb.easywebservice.domain.Product.model;
 
 import easyweb.easywebservice.domain.Category.model.Category;
-import easyweb.easywebservice.domain.Like.model.Like;
+import easyweb.easywebservice.domain.Like.model.Liked;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,7 +31,7 @@ public class Product {
     private Category category;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<Like> likes = new ArrayList<>();
+    private List<Liked> likeds = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     private ProductStatus status;

@@ -1,10 +1,8 @@
 package easyweb.easywebservice.domain.Product.api;
 
-import easyweb.easywebservice.domain.Like.dto.LikeDTO;
 import easyweb.easywebservice.domain.Like.dto.LikeDTO.LikeCreateDto;
 import easyweb.easywebservice.domain.Like.dto.LikeDTO.LikeDeleteDto;
-import easyweb.easywebservice.domain.Like.model.Like;
-import easyweb.easywebservice.domain.Product.dto.ProductDTO;
+import easyweb.easywebservice.domain.Like.model.Liked;
 import easyweb.easywebservice.domain.Product.dto.ProductDTO.ProductDetailDto;
 import easyweb.easywebservice.domain.Product.dto.ProductInfoDto;
 import easyweb.easywebservice.global.util.SecurityUtil;
@@ -16,7 +14,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -115,10 +112,10 @@ public class ProductController {
 
     @Operation(summary = "좋아요 등록 API", description = "좋아요 등록 API입니다")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "제품 좋아요 성공시", content = @Content(schema = @Schema(implementation = Like.class)))
+            @ApiResponse(responseCode = "200", description = "제품 좋아요 성공시", content = @Content(schema = @Schema(implementation = Liked.class)))
     })
     @PostMapping("/like")
-    public ResponseEntity<Like> addLike(@RequestBody LikeCreateDto likeCreateDto) {
+    public ResponseEntity<Liked> addLike(@RequestBody LikeCreateDto likeCreateDto) {
 
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(productService.addLikeToProduct(currentMemberId, likeCreateDto));

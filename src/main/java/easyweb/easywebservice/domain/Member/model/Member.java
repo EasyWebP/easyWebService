@@ -1,6 +1,6 @@
 package easyweb.easywebservice.domain.Member.model;
 
-import easyweb.easywebservice.domain.Like.model.Like;
+import easyweb.easywebservice.domain.Like.model.Liked;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,7 +18,7 @@ public class Member extends MemberBase {
     private String nickname;
 
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<Like> likeProducts = new ArrayList<>();
+    private List<Liked> likedProducts = new ArrayList<>();
     @Builder
     public Member(Long id, String email, String password, Authority authority, UserLoginType userLoginType, String userName, String nickName, Boolean deleted) {
         super(id, email, password, authority, userLoginType);
