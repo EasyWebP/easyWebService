@@ -1,5 +1,6 @@
 package easyweb.easywebservice.domain.Product.model;
 
+import easyweb.easywebservice.domain.Category.model.Category;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,12 +21,12 @@ public class Product {
     private String imagePath;
     private String detailImageUrl1;
     private String detailImageUrl2;
-    /*
-    좋아요랑 카테고리는 지금은 빼고 나중에 따로 엔티티 생기면 그때 ㄱㄱ
 
-     */
-//    private boolean liked = false;
-//    private String category;
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
+
+
     @Enumerated(EnumType.STRING)
     private ProductStatus status;
 
