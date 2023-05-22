@@ -22,6 +22,7 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
@@ -85,6 +86,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                         .queryParam("nickname", member.getNickname())
                         .build();
             }
+            uriComponents.encode(StandardCharsets.UTF_8);
             return uriComponents.toUriString();
 
 
@@ -93,6 +95,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                     .queryParam("token", tokenDto.getAccessToken())
                     .queryParam("email", "NULL")
                     .build();
+            uriComponents.encode(StandardCharsets.UTF_8);
             return uriComponents.toUriString();
         }
 
