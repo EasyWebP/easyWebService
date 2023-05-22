@@ -18,6 +18,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "p.manufacturer, " +
             "p.imagePath) " +
             "FROM Product p " +
-            "JOIN Like l ON l.member.id = :id")
+            "JOIN Liked l ON l.member.id = :id")
     Page<ProductInfoDto> findLikedProducts(@Param("id") Long memberId, Pageable pageable);
 }

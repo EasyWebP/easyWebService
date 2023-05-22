@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @NoArgsConstructor
-public class Like {
+public class Liked {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "like_id")
@@ -26,7 +26,7 @@ public class Like {
     @JoinColumn(name = "product_id")
     private Product product;
     @Builder
-    public Like(Member member, Product product) {
+    public Liked(Member member, Product product) {
         this.member = member;
         this.product = product;
     }

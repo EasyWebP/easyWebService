@@ -6,16 +6,14 @@ import java.util.List;
 import easyweb.easywebservice.domain.Category.exception.CategoryNotFoundException;
 import easyweb.easywebservice.domain.Category.model.Category;
 import easyweb.easywebservice.domain.Category.repository.CategoryRepository;
-import easyweb.easywebservice.domain.Like.dto.LikeDTO;
 import easyweb.easywebservice.domain.Like.dto.LikeDTO.LikeCreateDto;
 import easyweb.easywebservice.domain.Like.dto.LikeDTO.LikeDeleteDto;
 import easyweb.easywebservice.domain.Like.exception.LikeAlreadyExists;
 import easyweb.easywebservice.domain.Like.exception.LikeDoesntExist;
-import easyweb.easywebservice.domain.Like.model.Like;
+import easyweb.easywebservice.domain.Like.model.Liked;
 import easyweb.easywebservice.domain.Like.repository.LikeRepository;
 import easyweb.easywebservice.domain.Member.model.Member;
 import easyweb.easywebservice.domain.Member.repository.MemberRepository;
-import easyweb.easywebservice.domain.Product.dto.ProductDTO;
 import easyweb.easywebservice.domain.Product.dto.ProductDTO.ProductDetailDto;
 import easyweb.easywebservice.domain.Product.dto.ProductInfoDto;
 import easyweb.easywebservice.domain.Product.repository.ProductMapper;
@@ -152,13 +150,13 @@ public class ProductService {
     }
 
     @Transactional
-    public Like addLikeToProduct(Long memberId, LikeCreateDto likeCreateDto) {
+    public Liked addLikeToProduct(Long memberId, LikeCreateDto likeCreateDto) {
         if (likeRepository.existsByMemberIdAndProductId(memberId, likeCreateDto.getProductId())) {
             throw new LikeAlreadyExists();
         }
         Member member = memberRepository.findById(memberId).orElseThrow(NotFoundByIdException::new);
         Product product = productRepository.findById(likeCreateDto.getProductId()).orElseThrow(NotFoundByIdException::new);
-        Like build = Like.builder().member(member).product(product).build();
+        Liked build = Liked.builder().member(member).product(product).build();
         return likeRepository.save(build);
 
     }
