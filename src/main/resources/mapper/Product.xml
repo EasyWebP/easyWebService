@@ -6,17 +6,33 @@
 
 <mapper namespace="easyweb.easywebservice.domain.Product.repository.ProductMapper">
     <select id="findProduct" parameterType="HashMap" resultType="easyweb.easywebservice.domain.Product.dto.ProductInfoDto">
-        SELECT p.product_id, p.name, p.price, p.manufacturer, p.shipping_company, p.image_path, p.detail_image_url1, p.detail_image_url2, p.status
+        SELECT p.product_id, p.name, p.price, p.manufacturer, p.shipping_company, p.image_path, p.detail_image_url1,
+        p.detail_image_url2, p.status
         FROM product p
         WHERE p.status = #{status}
         <choose>
-            <when test="price != null and desc != null">
-                ORDER BY p.price DESC
+            <when test="like == null">
+                <choose>
+                    <when test="asc == null">
+                        ORDER BY p.price DESC
+                    </when>
+                    <otherwise>
+                        ORDER BY p.price ASC
+                    </otherwise>
+                </choose>
             </when>
             <otherwise>
-                ORDER BY p.price ASC
+
             </otherwise>
         </choose>
+<!--        <choose>-->
+<!--            <when test="asc == null">-->
+<!--                ORDER BY p.price DESC-->
+<!--            </when>-->
+<!--            <otherwise>-->
+<!--                ORDER BY p.price ASC-->
+<!--            </otherwise>-->
+<!--        </choose>-->
         <choose>
             <when test="pageSize != null and offset != null">
                 LIMIT ${pageSize}
