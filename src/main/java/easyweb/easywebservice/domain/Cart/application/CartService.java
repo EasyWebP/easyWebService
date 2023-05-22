@@ -1,0 +1,87 @@
+package easyweb.easywebservice.domain.Cart.application;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import easyweb.easywebservice.domain.Cart.dto.CartDTO.CartCreateDTO;
+import easyweb.easywebservice.domain.Cart.dto.CartItemDTO.CartItemCreateDTO;
+import easyweb.easywebservice.domain.Cart.dto.CartItemDTO.CartItemDeleteDTO;
+import easyweb.easywebservice.domain.Cart.dto.CartItemDTO.CartItemInfoDTO;
+import easyweb.easywebservice.domain.Cart.model.Cart;
+import easyweb.easywebservice.domain.Cart.model.CartItem;
+import easyweb.easywebservice.domain.Cart.repository.CartItemRepository;
+import easyweb.easywebservice.domain.Cart.repository.CartRepository;
+import easyweb.easywebservice.domain.Member.model.Member;
+import easyweb.easywebservice.domain.Member.repository.MemberRepository;
+import easyweb.easywebservice.domain.Product.model.Product;
+import easyweb.easywebservice.domain.Product.repository.ProductRepository;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
+@Transactional
+@Service
+public class CartService {
+    private final MemberRepository memberRepository;
+    private final ProductRepository productRepository;
+    private final CartRepository cartRepository;
+    private final CartItemRepository cartItemRepository;
+
+    // 카트에 제품 추가
+    public Cart addItemToCart(CartCreateDTO cartCreateDTO, List<CartItemCreateDTO> cartItemCreateDTOs) {
+        Member member = memberRepository.findById(cartCreateDTO.getMemberId())
+                .orElseThrow(() -> new IllegalArgumentException("Member not found"));
+        Cart cart = cartCreateDTO.toEntity(memberRepository);
+        cart.updateCount(0);
+        cart.updateMember(member);
+        cartRepository.save(cart);
+
+        for (CartItemCreateDTO cartItemCreateDTO : cartItemCreateDTOs) {
+            Product product = productRepository.findById(cartItemCreateDTO.getProductId())
+                    .orElseThrow(() -> new IllegalArgumentException("Product not found"));
+
+            CartItem cartItem = cartItemCreateDTO.toEntity(productRepository);
+            cartItem.updateProduct(product);
+            cartItem.updateCart(cart);
+            cartItem.updateCount(cartItemCreateDTO.getCount());
+
+            cartItemRepository.save(cartItem);
+
+            cart.updateCount(cart.getCount() + cartItemCreateDTO.getCount());
+        }
+
+        return cart;
+    }
+
+    // 카트 안의 제품들 조회
+    public List<CartItemInfoDTO> getCartItems(Long cartId) {
+        Cart cart = cartRepository.findById(cartId)
+                .orElseThrow(() -> new IllegalArgumentException("Cart not found"));
+        List<CartItem> cartItems = cart.getCartItems();
+
+        List<CartItemInfoDTO> cartItemDTOs = new ArrayList<>();
+        for (CartItem cartItem : cartItems) {
+            cartItemDTOs.add(CartItemInfoDTO.fromCartItem(cartItem));
+        }
+
+        return cartItemDTOs;
+    }
+
+    // 카트 안의 제품 삭제
+    public void deleteCartItem(CartItemDeleteDTO cartItemDeleteDTO) {
+        CartItem cartItem = cartItemRepository.findById(cartItemDeleteDTO.getItemId())
+                .orElseThrow(() -> new IllegalArgumentException("Cart item not found"));
+
+        if (!cartItem.getCart().getId().equals(cartItemDeleteDTO.getCartId())) {
+            throw new IllegalArgumentException("Cart item does not belong to the provided cart ID");
+        }
+
+        Cart cart = cartItem.getCart();
+        int cartItemCount = cartItem.getCount();
+        cart.updateCount(cart.getCount() - cartItemCount);
+        cartItemRepository.delete(cartItem);
+    }
+
+}

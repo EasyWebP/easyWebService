@@ -1,5 +1,6 @@
 package easyweb.easywebservice.domain.Product.model;
 
+import easyweb.easywebservice.domain.Cart.model.CartItem;
 import easyweb.easywebservice.domain.Category.model.Category;
 import easyweb.easywebservice.domain.Like.model.Liked;
 import jakarta.persistence.*;
@@ -32,6 +33,9 @@ public class Product {
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Liked> likeds = new ArrayList<>();
+
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    private List<CartItem> cartItems = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     private ProductStatus status;
