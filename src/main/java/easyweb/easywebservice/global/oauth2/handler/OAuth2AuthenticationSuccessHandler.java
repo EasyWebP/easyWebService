@@ -103,7 +103,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             uriComponents = UriComponentsBuilder.fromUriString(targetUrl)
                     .queryParam("created", true)
                     .queryParam("email", kakaoAccount.get("email"))
-                    .queryParam("userName", URLEncoder.encode(profile.get("nickname"), StandardCharsets.UTF_8))
+                    .queryParam("username", URLEncoder.encode(profile.get("nickname"), StandardCharsets.UTF_8))
                     .queryParam("loginType","KAKAO")
                     .build();
         } else {
@@ -111,7 +111,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             uriComponents = UriComponentsBuilder.fromUriString(targetUrl)
                     .queryParam("created", true)
                     .queryParam("email", attributes.get("email"))
-                    .queryParam("userName", URLEncoder.encode((String) attributes.get("name"), StandardCharsets.UTF_8))
+                    .queryParam("username", URLEncoder.encode((String) attributes.get("name"), StandardCharsets.UTF_8))
                     .queryParam("loginType", "GOOGLE")
                     .build();
         }
