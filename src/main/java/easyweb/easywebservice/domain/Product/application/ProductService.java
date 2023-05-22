@@ -16,6 +16,7 @@ import easyweb.easywebservice.domain.Like.repository.LikeRepository;
 import easyweb.easywebservice.domain.Member.model.Member;
 import easyweb.easywebservice.domain.Member.repository.MemberRepository;
 import easyweb.easywebservice.domain.Product.dto.ProductDTO;
+import easyweb.easywebservice.domain.Product.dto.ProductDTO.ProductDetailDto;
 import easyweb.easywebservice.domain.Product.dto.ProductInfoDto;
 import easyweb.easywebservice.domain.Product.repository.ProductMapper;
 import easyweb.easywebservice.global.error.exception.NotFoundByIdException;
@@ -122,6 +123,26 @@ public class ProductService {
         List<ProductInfoDto> product = productMapper.findProduct(map);
         List<Long> counted = productMapper.countQueryForProduct(map);
         return new PageImpl<>(product, pageable, counted.size());
+    }
+
+    @Transactional
+    public ProductDetailDto getProductDetail(Long memberId, Long productId) {
+        Product product = productRepository.findById(productId).orElseThrow(NotFoundByIdException::new);
+        boolean liked = likeRepository.existsByMemberIdAndProductId(memberId, productId);
+        Category category = product.getCategory();
+        return ProductDetailDto.builder()
+                .id(productId)
+                .name(product.getName())
+                .price(product.getPrice())
+                .imagePath(product.getImagePath())
+                .liked(liked)
+                .shippingCompany(product.getShippingCompany())
+                .detailImageUrl1(product.getDetailImageUrl1())
+                .detailImageUrl2(product.getDetailImageUrl2())
+                .manufacturer(product.getManufacturer())
+                .status(product.getStatus())
+                .category(category.getName())
+                .build();
     }
 
     @Transactional

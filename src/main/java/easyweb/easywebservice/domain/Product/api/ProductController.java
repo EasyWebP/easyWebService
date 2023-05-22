@@ -5,6 +5,7 @@ import easyweb.easywebservice.domain.Like.dto.LikeDTO.LikeCreateDto;
 import easyweb.easywebservice.domain.Like.dto.LikeDTO.LikeDeleteDto;
 import easyweb.easywebservice.domain.Like.model.Like;
 import easyweb.easywebservice.domain.Product.dto.ProductDTO;
+import easyweb.easywebservice.domain.Product.dto.ProductDTO.ProductDetailDto;
 import easyweb.easywebservice.domain.Product.dto.ProductInfoDto;
 import easyweb.easywebservice.global.util.SecurityUtil;
 import io.swagger.v3.oas.annotations.Operation;
@@ -88,6 +89,17 @@ public class ProductController {
             @RequestParam(value = "category", required = false) String category, Pageable pageable) {
 
         return ResponseEntity.ok(productService.getAllProducts(status, like, asc, category, pageable));
+    }
+
+    @Operation(summary = "제품 개별 조회 API", description = "제품 개별 조회 API 구현")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "제품 개별 조회 성공시", content = @Content(schema = @Schema(implementation = ProductDetailDto.class)))
+    })
+    @GetMapping("/{id}")
+    public ResponseEntity<ProductDetailDto> getProductDetail(@PathVariable("id") Long id) {
+
+        Long currentMemberId = SecurityUtil.getCurrentMemberId();
+        return ResponseEntity.ok(productService.getProductDetail(currentMemberId, id));
     }
 
     @Operation(summary = "좋아요 상품 조회 API", description = "좋아요한 상품 조회 API 입니다")
