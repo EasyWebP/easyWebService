@@ -79,8 +79,9 @@ public class ProductController {
     public Page<ProductInfoDto> getAllProducts(
             @RequestParam(value = "status", required = true, defaultValue = "SALE") String status,
             @RequestParam(value = "like", required = false) String like,
-            @RequestParam(value = "asc", required = false) String asc, Pageable pageable) {
+            @RequestParam(value = "asc", required = false) String asc,
+            @RequestParam(value = "category", required = false) String category, Pageable pageable) {
 
-        return productService.getAllProducts(status, like, asc, pageable);
+        return productService.getAllProducts(status, like, asc, category, pageable);
     }
 }

@@ -9,7 +9,11 @@
         SELECT p.product_id, p.name, p.price, p.manufacturer, p.shipping_company, p.image_path, p.detail_image_url1,
         p.detail_image_url2, p.status
         FROM product p
+        JOIN category c on p.category_id = c.category_id
         WHERE p.status = #{status}
+        <if test="category != null">
+            AND c.name = #{category}
+        </if>
         <choose>
             <when test="like == null">
                 <choose>

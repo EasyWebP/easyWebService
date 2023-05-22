@@ -1,5 +1,6 @@
 package easyweb.easywebservice.domain.Product.dto;
 
+import easyweb.easywebservice.domain.Category.model.Category;
 import easyweb.easywebservice.domain.Product.model.Product;
 import easyweb.easywebservice.domain.Product.model.Product.ProductStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -26,18 +27,13 @@ public class ProductDTO {
         private String detailImageUrl1;
         @Schema(description = "제품 상세 사진 Url 2")
         private String detailImageUrl2;
-        /*
-        좋아요 여부는 빠져야될 것 같아 이건 나중에 좋아요 넣고 나서 ㄱㄱ
-         */
-        @Schema(description = "좋아요 여부")
-        private boolean liked;
         @Schema(description = "카테고리")
         private String category;
         @Schema(description = "판매 상품 여부")
-//        @Builder.Default
         private ProductStatus status;
 
-        public Product toEntity() {
+        public Product toEntity(Category category) {
+
             return Product.builder()
                     .name(this.name)
                     .price(this.price)
@@ -46,8 +42,7 @@ public class ProductDTO {
                     .imagePath(imagePath)
                     .detailImageUrl1(detailImageUrl1)
                     .detailImageUrl2(detailImageUrl2)
-//                    .liked(liked)
-//                    .category(category)
+                    .category(category)
                     .status(status)
                     .build();
         }

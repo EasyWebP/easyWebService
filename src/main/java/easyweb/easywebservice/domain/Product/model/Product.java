@@ -37,7 +37,7 @@ public class Product {
 
     @Builder
     public Product(String name, int price, String manufacturer, String shippingCompany, String imagePath,
-            String detailImageUrl1, String detailImageUrl2, ProductStatus status) {
+            String detailImageUrl1, String detailImageUrl2, ProductStatus status, Category category) {
         this.name = name;
         this.price = price;
         this.manufacturer = manufacturer;
@@ -45,8 +45,7 @@ public class Product {
         this.imagePath = imagePath;
         this.detailImageUrl1 = detailImageUrl1;
         this.detailImageUrl2 = detailImageUrl2;
-//        this.liked = liked;
-//        this.category = category;
+        this.category = category;
         this.status = status;
     }
 
@@ -78,9 +77,9 @@ public class Product {
         this.detailImageUrl2 = detailImageUrl2;
     }
 
-//    public void updateCategory(String category) {
-//        this.category = category;
-//    }
+    public void updateCategory(Category category) {
+        this.category = category;
+    }
 
     public void updateStatus(ProductStatus status) {
         this.status = status;
