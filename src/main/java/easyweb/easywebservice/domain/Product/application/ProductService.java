@@ -6,9 +6,19 @@ import java.util.List;
 import easyweb.easywebservice.domain.Category.exception.CategoryNotFoundException;
 import easyweb.easywebservice.domain.Category.model.Category;
 import easyweb.easywebservice.domain.Category.repository.CategoryRepository;
+import easyweb.easywebservice.domain.Like.dto.LikeDTO;
+import easyweb.easywebservice.domain.Like.dto.LikeDTO.LikeCreateDto;
+import easyweb.easywebservice.domain.Like.dto.LikeDTO.LikeDeleteDto;
+import easyweb.easywebservice.domain.Like.exception.LikeAlreadyExists;
+import easyweb.easywebservice.domain.Like.exception.LikeDoesntExist;
+import easyweb.easywebservice.domain.Like.model.Like;
+import easyweb.easywebservice.domain.Like.repository.LikeRepository;
+import easyweb.easywebservice.domain.Member.model.Member;
+import easyweb.easywebservice.domain.Member.repository.MemberRepository;
 import easyweb.easywebservice.domain.Product.dto.ProductDTO;
 import easyweb.easywebservice.domain.Product.dto.ProductInfoDto;
 import easyweb.easywebservice.domain.Product.repository.ProductMapper;
+import easyweb.easywebservice.global.error.exception.NotFoundByIdException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -28,6 +38,8 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
     private final CategoryRepository categoryRepository;
+    private final LikeRepository likeRepository;
+    private final MemberRepository memberRepository;
 
     @Transactional
     public Product addProduct(ProductCreateDTO productCreateDTO) {
@@ -110,5 +122,33 @@ public class ProductService {
         List<ProductInfoDto> product = productMapper.findProduct(map);
         List<Long> counted = productMapper.countQueryForProduct(map);
         return new PageImpl<>(product, pageable, counted.size());
+    }
+
+    @Transactional
+    public Page<ProductInfoDto> getLikedProducts(Long memberId, Pageable pageable) {
+
+        return productRepository.findLikedProducts(memberId, pageable);
+    }
+
+    @Transactional
+    public Like addLikeToProduct(Long memberId, LikeCreateDto likeCreateDto) {
+        if (likeRepository.existsByMemberIdAndProductId(memberId, likeCreateDto.getProductId())) {
+            throw new LikeAlreadyExists();
+        }
+        Member member = memberRepository.findById(memberId).orElseThrow(NotFoundByIdException::new);
+        Product product = productRepository.findById(likeCreateDto.getProductId()).orElseThrow(NotFoundByIdException::new);
+        Like build = Like.builder().member(member).product(product).build();
+        return likeRepository.save(build);
+
+    }
+
+    @Transactional
+    public LikeDeleteDto deleteLike(Long memberId, LikeDeleteDto likeDeleteDto) {
+        if (likeRepository.existsByMemberIdAndProductId(memberId, likeDeleteDto.getProductId())) {
+            likeRepository.deleteByMemberIdAndProductId(memberId, likeDeleteDto.getProductId());
+        } else {
+            throw new LikeDoesntExist();
+        }
+        return likeDeleteDto;
     }
 }

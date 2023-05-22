@@ -1,7 +1,12 @@
 package easyweb.easywebservice.domain.Product.api;
 
+import easyweb.easywebservice.domain.Like.dto.LikeDTO;
+import easyweb.easywebservice.domain.Like.dto.LikeDTO.LikeCreateDto;
+import easyweb.easywebservice.domain.Like.dto.LikeDTO.LikeDeleteDto;
+import easyweb.easywebservice.domain.Like.model.Like;
 import easyweb.easywebservice.domain.Product.dto.ProductDTO;
 import easyweb.easywebservice.domain.Product.dto.ProductInfoDto;
+import easyweb.easywebservice.global.util.SecurityUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -73,15 +78,48 @@ public class ProductController {
     // 제품 조회 products?page=0&size=10
     @Operation(summary = "제품 조회 API", description = "제품 조회 API 입니다")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "제품 조회 성공시", content = @Content(schema = @Schema(implementation = Product.class)))
+            @ApiResponse(responseCode = "200", description = "제품 조회 성공시", content = @Content(schema = @Schema(implementation = ProductInfoDto.class)))
     })
     @GetMapping
-    public Page<ProductInfoDto> getAllProducts(
+    public ResponseEntity<Page<ProductInfoDto>> getAllProducts(
             @RequestParam(value = "status", required = true, defaultValue = "SALE") String status,
             @RequestParam(value = "like", required = false) String like,
             @RequestParam(value = "asc", required = false) String asc,
             @RequestParam(value = "category", required = false) String category, Pageable pageable) {
 
-        return productService.getAllProducts(status, like, asc, category, pageable);
+        return ResponseEntity.ok(productService.getAllProducts(status, like, asc, category, pageable));
+    }
+
+    @Operation(summary = "좋아요 상품 조회 API", description = "좋아요한 상품 조회 API 입니다")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "좋아요한 상품 조회 성공시", content = @Content(schema = @Schema(implementation = ProductInfoDto.class)))
+    })
+    @GetMapping("/like")
+    public ResponseEntity<Page<ProductInfoDto>> getLikedProducts(Pageable pageable) {
+
+        Long currentMemberId = SecurityUtil.getCurrentMemberId();
+        return ResponseEntity.ok(productService.getLikedProducts(currentMemberId, pageable));
+    }
+
+    @Operation(summary = "좋아요 등록 API", description = "좋아요 등록 API입니다")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "제품 좋아요 성공시", content = @Content(schema = @Schema(implementation = Like.class)))
+    })
+    @PostMapping("/like")
+    public ResponseEntity<Like> addLike(@RequestBody LikeCreateDto likeCreateDto) {
+
+        Long currentMemberId = SecurityUtil.getCurrentMemberId();
+        return ResponseEntity.ok(productService.addLikeToProduct(currentMemberId, likeCreateDto));
+    }
+
+    @Operation(summary = "좋아요 해제 API", description = "좋아요 해제 API 입니다")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "제품 좋아요 해제 성공시", content = @Content(schema = @Schema(implementation = LikeDeleteDto.class)))
+    })
+    @DeleteMapping("/like/{id}")
+    public ResponseEntity<LikeDeleteDto> deleteLike(@RequestBody LikeDeleteDto likeDeleteDto) {
+
+        Long currentMemberId = SecurityUtil.getCurrentMemberId();
+        return ResponseEntity.ok(productService.deleteLike(currentMemberId, likeDeleteDto));
     }
 }
