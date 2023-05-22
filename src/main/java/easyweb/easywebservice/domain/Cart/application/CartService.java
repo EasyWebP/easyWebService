@@ -33,6 +33,10 @@ public class CartService {
     public Cart addItemToCart(CartCreateDTO cartCreateDTO, List<CartItemCreateDTO> cartItemCreateDTOs) {
         Member member = memberRepository.findById(cartCreateDTO.getMemberId())
                 .orElseThrow(() -> new IllegalArgumentException("Member not found"));
+
+        /*
+        아래 cart 새로 저장하는 부분은 빼야될 것 같아 대신 회원가입하면서 cart 객체 생성해줄게 그거 불러오면될듯?
+         */
         Cart cart = cartCreateDTO.toEntity(memberRepository);
         cart.updateCount(0);
         cart.updateMember(member);
@@ -41,20 +45,37 @@ public class CartService {
         for (CartItemCreateDTO cartItemCreateDTO : cartItemCreateDTOs) {
             Product product = productRepository.findById(cartItemCreateDTO.getProductId())
                     .orElseThrow(() -> new IllegalArgumentException("Product not found"));
-
+            /*
+            상품조회가 중복되는 것 같아 그냥
+            CartItem.builder.product(product).cart(cart).count(cartItemCreateDto.getCount()).build;
+            로 CartItem을 생성해도되지 않을까?
+             */
             CartItem cartItem = cartItemCreateDTO.toEntity(productRepository);
             cartItem.updateProduct(product);
             cartItem.updateCart(cart);
             cartItem.updateCount(cartItemCreateDTO.getCount());
 
             cartItemRepository.save(cartItem);
+            /*
+            Cart에 장바구니 총 아이템 수를 계산할 count가 없어도 장바구니 아이템 총 개수를 계산할 수 있다는 놀라운 사실
 
+            그렇기 때문에 아래 코드는 사실 불필요합니당
+             */
             cart.updateCount(cart.getCount() + cartItemCreateDTO.getCount());
         }
 
         return cart;
     }
+    /*
+    아래 코드도 잘했네
 
+    아래 코드가 가독성이 안좋다고 느껴지거나,
+    뭔가 코드 짜면서 아 이거 좀 아닌 것 같은데, 더 편하게 할 수 있을 것 같은데
+    라는 생각이 들었다면
+
+    https://ssdragon.tistory.com/97
+    JPA DTO 직접 조회를 찾아보세영
+     */
     // 카트 안의 제품들 조회
     public List<CartItemInfoDTO> getCartItems(Long cartId) {
         Cart cart = cartRepository.findById(cartId)

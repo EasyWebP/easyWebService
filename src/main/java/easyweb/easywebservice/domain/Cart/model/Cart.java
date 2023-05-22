@@ -4,17 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import easyweb.easywebservice.domain.Member.model.Member;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+/*
+엔티티 설계는 굳 입니당
+다만 count는 따로 구할 수 있는 방법 있으니 필요 없을 것 같고,
+updateMember도 유지보수성을 위해 빼는게 좋을듯?
+
+updateMember있으면 저 메서드 잘못 쓰면 내가 담아놓은 장바구니가 너의 장바구니가 될 수도 있는데
+
+이런 일은 일어나면 안되겠지???
+ */
 
 @Getter
 @NoArgsConstructor
@@ -22,6 +25,7 @@ import lombok.NoArgsConstructor;
 public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "cart_id") // 아이디 칼럼명 명시적으로 써줘야행
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
@@ -39,7 +43,7 @@ public class Cart {
         this.count = count;
     }
 
-    @Builder
+//    @Builder 이거 Builder 생성자 아닌 곳에 써서 주석처리함
     public void updateMember(Member member) {
         this.member = member;
     }

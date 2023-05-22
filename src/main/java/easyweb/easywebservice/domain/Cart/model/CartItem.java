@@ -1,16 +1,21 @@
 package easyweb.easywebservice.domain.Cart.model;
 
 import easyweb.easywebservice.domain.Product.model.Product;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+
+/*
+여기서도 updateProduct랑 updateCart는 빼는게 좋을듯??
+
+유지보수성을 위해서..
+
+저런 메서드 만들어 놓고 잘못 쓰면 갑자기 내 장바구니 상품이 다른 사람 장바구니에 담기게되고 그럴 수도 있어
+
+updateCount는 필요할 것 같네
+ */
 
 @Getter
 @NoArgsConstructor
@@ -18,6 +23,7 @@ import lombok.NoArgsConstructor;
 public class CartItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "cartItem_id") // 이렇게 아이디 칼럼 명시적으로 적어주는게 좋아여
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
