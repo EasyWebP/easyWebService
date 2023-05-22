@@ -22,6 +22,8 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
@@ -57,7 +59,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
 
-    protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response, Authentication authentication, Optional<Member> byId) {
+    protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response, Authentication authentication, Optional<Member> byId) throws UnsupportedEncodingException {
         Optional<String> redirectUri = CookieUtil.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME)
                 .map(Cookie::getValue);
         String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
@@ -66,8 +68,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         // redis에 쿠키 저장
         ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
-        valueOperations.set(authentication.getName(), tokenDto.getRefreshToken());
-        redisTemplate.expire(authentication.getName(), REFRESH_TOKEN_EXPIRE_TIME, TimeUnit.MILLISECONDS);
         if (byId.isPresent()) {
             Member member = byId.get();
             UriComponents uriComponents;
@@ -85,9 +85,11 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                         .queryParam("created", false)
                         .queryParam("nickname", member.getNickname())
                         .build();
+
+                valueOperations.set(authentication.getName(), tokenDto.getRefreshToken());
+                redisTemplate.expire(authentication.getName(), REFRESH_TOKEN_EXPIRE_TIME, TimeUnit.MILLISECONDS);
             }
-            uriComponents.encode(StandardCharsets.UTF_8);
-            return uriComponents.toUriString();
+            return URLEncoder.encode(uriComponents.toUriString(), StandardCharsets.UTF_8);
 
 
         } else {
@@ -95,8 +97,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                     .queryParam("token", tokenDto.getAccessToken())
                     .queryParam("email", "NULL")
                     .build();
-            uriComponents.encode(StandardCharsets.UTF_8);
-            return uriComponents.toUriString();
+            return URLEncoder.encode(uriComponents.toUriString(), StandardCharsets.UTF_8);
         }
 
 
