@@ -1,10 +1,7 @@
 package easyweb.easywebservice.domain.Member.application;
 
 import easyweb.easywebservice.domain.Member.dto.MemberDTO;
-import easyweb.easywebservice.domain.Member.dto.MemberDTO.EmailExistenceDto;
-import easyweb.easywebservice.domain.Member.dto.MemberDTO.LoginDto;
-import easyweb.easywebservice.domain.Member.dto.MemberDTO.LoginResult;
-import easyweb.easywebservice.domain.Member.dto.MemberDTO.SignUpDto;
+import easyweb.easywebservice.domain.Member.dto.MemberDTO.*;
 import easyweb.easywebservice.domain.Member.exception.MemberExistsWithEmailException;
 import easyweb.easywebservice.domain.Member.model.Member;
 import easyweb.easywebservice.domain.Member.repository.MemberRepository;
@@ -82,6 +79,27 @@ public class AuthService {
     @Transactional
     public LoginResult login(LoginDto loginDto) {
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = loginDto.toAuthentication();
+
+        Authentication authenticate = authenticationManagerBuilder.getObject().authenticate(usernamePasswordAuthenticationToken);
+
+        TokenInfoDTO tokenInfoDTO = jwtTokenProvider.generateTokenDto(authenticate);
+        log.info("로그인 API 중 토큰 생성 로직 실행");
+        ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
+        valueOperations.set(authenticate.getName(), tokenInfoDTO.getRefreshToken());
+        redisTemplate.expire(authenticate.getName(), REFRESH_TOKEN_EXPIRE_TIME, TimeUnit.MILLISECONDS);
+
+        return LoginResult.builder()
+                .memberInfo(memberRepository.findMemberInfoById(Long.parseLong(authenticate.getName())).get())
+                .tokenInfo(tokenInfoDTO.toTokenIssueDTO())
+                .build();
+    }
+
+    @Transactional
+    public LoginResult socialLogin(SocialLoginDto socialLoginDto) {
+        Member entity = socialLoginDto.toEntity(passwordEncoder);
+        memberRepository.save(entity);
+
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = socialLoginDto.toAuthentication();
 
         Authentication authenticate = authenticationManagerBuilder.getObject().authenticate(usernamePasswordAuthenticationToken);
 

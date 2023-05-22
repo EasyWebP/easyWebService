@@ -96,6 +96,39 @@ public class MemberDTO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Getter
+    @Schema(description = "소셜 로그인시 회원가입 요청")
+    public static class SocialLoginDto {
+        @Schema(description = "로그인할 유저 이메일")
+        private String email;
+        @Schema(description = "유저 본명")
+        private String username;
+        @Schema(description = "유저 닉네임")
+        private String nickname;
+        @Schema(description = "유저 로그인 타입")
+        private UserLoginType loginType;
+
+        public Member toEntity(PasswordEncoder passwordEncoder) {
+            return Member.builder()
+                    .password(passwordEncoder.encode("12345678"))
+                    .deleted(false)
+                    .email(email)
+                    .userName(username)
+                    .authority(ROLE_USER)
+                    .nickName(nickname)
+                    .userLoginType(loginType).build();
+        }
+
+        public UsernamePasswordAuthenticationToken toAuthentication() {
+            return new UsernamePasswordAuthenticationToken(email, "12345678");
+        }
+    }
+
+
+
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
     @Schema(description = "로그인 결과")
     public static class LoginResult {
         @Schema(description = "멤버 정보")
