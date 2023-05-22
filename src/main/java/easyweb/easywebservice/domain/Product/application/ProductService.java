@@ -3,6 +3,9 @@ package easyweb.easywebservice.domain.Product.application;
 import java.util.HashMap;
 import java.util.List;
 
+import easyweb.easywebservice.domain.Category.exception.CategoryNotFoundException;
+import easyweb.easywebservice.domain.Category.model.Category;
+import easyweb.easywebservice.domain.Category.repository.CategoryRepository;
 import easyweb.easywebservice.domain.Product.dto.ProductDTO;
 import easyweb.easywebservice.domain.Product.dto.ProductInfoDto;
 import easyweb.easywebservice.domain.Product.repository.ProductMapper;
@@ -24,10 +27,12 @@ import lombok.RequiredArgsConstructor;
 public class ProductService {
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
+    private final CategoryRepository categoryRepository;
 
     @Transactional
     public Product addProduct(ProductCreateDTO productCreateDTO) {
-        Product product = productCreateDTO.toEntity();
+        Category category = categoryRepository.findCategoryByName(productCreateDTO.getCategory()).orElseThrow(CategoryNotFoundException::new);
+        Product product = productCreateDTO.toEntity(category);
         return productRepository.save(product);
     }
 
@@ -57,9 +62,10 @@ public class ProductService {
         if (productUpdateDTO.getDetailImageUrl2() != null) {
             existingProduct.updateDetailImageUrl2(productUpdateDTO.getDetailImageUrl2());
         }
-//        if (productUpdateDTO.getCategory() != null) {
-//            existingProduct.updateCategory(productUpdateDTO.getCategory());
-//        }
+        if (productUpdateDTO.getCategory() != null) {
+            Category category = categoryRepository.findCategoryByName(productUpdateDTO.getCategory()).orElseThrow(CategoryNotFoundException::new);
+            existingProduct.updateCategory(category);
+        }
         if (productUpdateDTO.getStatus() != null) {
             ProductStatus status = null;
             for (ProductStatus value : ProductStatus.values()) {
@@ -93,11 +99,12 @@ public class ProductService {
     }
 
     @Transactional
-    public Page<ProductInfoDto> getAllProducts(String status, String like, String asc, Pageable pageable) {
+    public Page<ProductInfoDto> getAllProducts(String status, String like, String asc, String category, Pageable pageable) {
         HashMap<String, Object> map = new HashMap<>();
         map.put("status", status);
         map.put("like", like);
         map.put("asc", asc);
+        map.put("category", category);
         map.put("offset", pageable.getOffset());
         map.put("pageSize", pageable.getPageSize());
         List<ProductInfoDto> product = productMapper.findProduct(map);
