@@ -1,7 +1,7 @@
 package easyweb.easywebservice.domain.Product.api;
 
+import easyweb.easywebservice.domain.Like.dto.LikeDTO;
 import easyweb.easywebservice.domain.Like.dto.LikeDTO.LikeCreateDto;
-import easyweb.easywebservice.domain.Like.dto.LikeDTO.LikeDeleteDto;
 import easyweb.easywebservice.domain.Like.model.Liked;
 import easyweb.easywebservice.domain.Product.dto.ProductDTO.ProductDetailDto;
 import easyweb.easywebservice.domain.Product.dto.ProductInfoDto;
@@ -109,25 +109,16 @@ public class ProductController {
         return ResponseEntity.ok(productService.getLikedProducts(currentMemberId, pageable));
     }
 
-    @Operation(summary = "좋아요 등록 API", description = "좋아요 등록 API입니다")
+    @Operation(summary = "상품 좋아요 API", description = "상품 좋아요 API입니다")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "제품 좋아요 성공시", content = @Content(schema = @Schema(implementation = Liked.class)))
     })
     @PostMapping("/like")
-    public ResponseEntity<String> addLike(@RequestBody LikeCreateDto likeCreateDto) {
+    public ResponseEntity<LikeDTO.LikeResult> addLike(@RequestBody LikeCreateDto likeCreateDto) {
 
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
-        return ResponseEntity.ok(productService.addLikeToProduct(currentMemberId, likeCreateDto));
+        return ResponseEntity.ok(productService.likeProduct(currentMemberId, likeCreateDto));
     }
 
-    @Operation(summary = "좋아요 해제 API", description = "좋아요 해제 API 입니다")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "제품 좋아요 해제 성공시", content = @Content(schema = @Schema(implementation = LikeDeleteDto.class)))
-    })
-    @DeleteMapping("/like")
-    public ResponseEntity<LikeDeleteDto> deleteLike(@RequestBody LikeDeleteDto likeDeleteDto) {
 
-        Long currentMemberId = SecurityUtil.getCurrentMemberId();
-        return ResponseEntity.ok(productService.deleteLike(currentMemberId, likeDeleteDto));
-    }
 }

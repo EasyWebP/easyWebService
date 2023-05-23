@@ -20,8 +20,10 @@ public class LikeDTO {
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor
-    @Schema(description = "좋아요 해제 요청")
-    public static class LikeDeleteDto {
-        private Long productId;
+    @Schema(description = "좋아요 생성 요청")
+    public static class LikeResult {
+        private Boolean like;
     }
+
+
 }

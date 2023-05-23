@@ -7,10 +7,10 @@ import java.util.Objects;
 import easyweb.easywebservice.domain.Category.exception.CategoryNotFoundException;
 import easyweb.easywebservice.domain.Category.model.Category;
 import easyweb.easywebservice.domain.Category.repository.CategoryRepository;
+import easyweb.easywebservice.domain.Like.dto.LikeDTO;
 import easyweb.easywebservice.domain.Like.dto.LikeDTO.LikeCreateDto;
-import easyweb.easywebservice.domain.Like.dto.LikeDTO.LikeDeleteDto;
+import easyweb.easywebservice.domain.Like.dto.LikeDTO.LikeResult;
 import easyweb.easywebservice.domain.Like.exception.LikeAlreadyExists;
-import easyweb.easywebservice.domain.Like.exception.LikeDoesntExist;
 import easyweb.easywebservice.domain.Like.model.Liked;
 import easyweb.easywebservice.domain.Like.repository.LikeRepository;
 import easyweb.easywebservice.domain.Member.model.Member;
@@ -169,26 +169,22 @@ public class ProductService {
     }
 
     @Transactional
-    public String addLikeToProduct(Long memberId, LikeCreateDto likeCreateDto) {
+    public LikeResult likeProduct(Long memberId, LikeCreateDto likeCreateDto) {
         if (likeRepository.existsByMemberIdAndProductId(memberId, likeCreateDto.getProductId())) {
-            throw new LikeAlreadyExists();
-        }
-        Member member = memberRepository.findById(memberId).orElseThrow(NotFoundByIdException::new);
-        Product product = productRepository.findById(likeCreateDto.getProductId()).orElseThrow(NotFoundByIdException::new);
-        Liked build = Liked.builder().member(member).product(product).build();
-        likeRepository.save(build);
-
-        return "CREATED";
-
-    }
-
-    @Transactional
-    public LikeDeleteDto deleteLike(Long memberId, LikeDeleteDto likeDeleteDto) {
-        if (likeRepository.existsByMemberIdAndProductId(memberId, likeDeleteDto.getProductId())) {
-            likeRepository.deleteByMemberIdAndProductId(memberId, likeDeleteDto.getProductId());
+            likeRepository.deleteByMemberIdAndProductId(memberId, likeCreateDto.getProductId());
+            return LikeResult.builder().like(false).build();
         } else {
-            throw new LikeDoesntExist();
+            Member member = memberRepository.findById(memberId).orElseThrow(NotFoundByIdException::new);
+            Product product = productRepository.findById(likeCreateDto.getProductId()).orElseThrow(NotFoundByIdException::new);
+            Liked build = Liked.builder().member(member).product(product).build();
+            likeRepository.save(build);
+            return LikeResult.builder().like(true).build();
         }
-        return likeDeleteDto;
+
+
+
+
     }
+
+
 }
