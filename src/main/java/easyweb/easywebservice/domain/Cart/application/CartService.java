@@ -35,16 +35,6 @@ public class CartService {
                 .orElseThrow(() -> new IllegalArgumentException("Member not found"));
 
         Cart cart = member.getCart();
-        /*
-         * 아래 cart 새로 저장하는 부분은 빼야될 것 같아 대신 회원가입하면서 cart 객체 생성해줄게 그거 불러오면될듯?
-         */
-        if (cart == null) {
-            cart = cartCreateDTO.toEntity(memberRepository);
-            cart.updateCount(0);
-            cart.updateMember(member);
-            cartRepository.save(cart);
-        }
-
         for (CartItemCreateDTO cartItemCreateDTO : cartItemCreateDTOs) {
             Product product = productRepository.findById(cartItemCreateDTO.getProductId())
                     .orElseThrow(() -> new IllegalArgumentException("Product not found"));
