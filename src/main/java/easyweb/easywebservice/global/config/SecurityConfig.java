@@ -80,6 +80,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/products/**").authenticated()
                         .requestMatchers(HttpMethod.PATCH, "/products/**").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/products/**").authenticated()
+                        .requestMatchers("/carts/**").authenticated()
                         .requestMatchers("/login/**").permitAll()
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/logout-redirect").permitAll()
