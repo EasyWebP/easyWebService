@@ -18,7 +18,9 @@ public class CartItemDTO {
     @Getter
     @Schema(description = "카트 아이템 생성 요청 DTO")
     public static class CartItemCreateDTO {
+        @Schema(description = "제품 아이디")
         private Long productId;
+        @Schema(description = "주문할 제품 개수")
         private int count;
 
         @Builder
@@ -39,8 +41,11 @@ public class CartItemDTO {
     @Getter
     @Schema(description = "카트 아이템 정보 요청 DTO")
     public static class CartItemInfoDTO {
+        @Schema(description = "카트 아이템 아이디")
         private Long id;
+        @Schema(description = "제품 아이디")
         private Long productId;
+        @Schema(description = "주문할 제품 개수")
         private int count;
 
         public static CartItemInfoDTO fromCartItem(CartItem cartItem) {
@@ -54,7 +59,9 @@ public class CartItemDTO {
     @Getter
     @Schema(description = "카트 아이템 삭제 요청 DTO")
     public static class CartItemDeleteDTO {
+        @Schema(description = "카트 아이템 아이디")
         private Long itemId;
+        @Schema(description = "카트 아이디")
         private Long cartId;
 
         public void updateItemId(Long itemId) {
