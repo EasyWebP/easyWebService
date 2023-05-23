@@ -1,5 +1,6 @@
 package easyweb.easywebservice.domain.Member.model;
 
+import easyweb.easywebservice.domain.Cart.model.Cart;
 import easyweb.easywebservice.domain.Like.model.Liked;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -19,15 +20,18 @@ public class Member extends MemberBase {
 
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Liked> likedProducts = new ArrayList<>();
+
+    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Cart cart;
+
     @Builder
-    public Member(Long id, String email, String password, Authority authority, UserLoginType userLoginType, String userName, String nickName, Boolean deleted) {
+    public Member(Long id, String email, String password, Authority authority, UserLoginType userLoginType,
+            String userName, String nickName, Boolean deleted) {
         super(id, email, password, authority, userLoginType);
         this.username = userName;
         this.nickname = nickName;
         this.deleted = deleted;
     }
-
-
 
     public void delete() {
         this.deleted = true;
@@ -37,11 +41,11 @@ public class Member extends MemberBase {
         super.updatePassword(newPassword);
     }
 
-
     public void updateUserName(String userName) {
         this.username = userName;
     }
 
     public void updateNickName(String nickName) {
-        this.nickname = nickName;}
+        this.nickname = nickName;
+    }
 }
