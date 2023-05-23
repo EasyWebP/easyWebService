@@ -20,4 +20,12 @@ public class SecurityUtil {
         return Long.parseLong(authentication.getName());
     }
 
+    public static Long getCurrentNullableMemberId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || authentication.getName() == null || authentication.getName().equals("anonymousUser")) {
+            return null;
+        }
+        return Long.parseLong(authentication.getName());
+    }
+
 }

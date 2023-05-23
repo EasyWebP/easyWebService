@@ -94,7 +94,7 @@ public class ProductController {
     @GetMapping("/{id}")
     public ResponseEntity<ProductDetailDto> getProductDetail(@PathVariable("id") Long id) {
 
-        Long currentMemberId = SecurityUtil.getCurrentMemberId();
+        Long currentMemberId = SecurityUtil.getCurrentNullableMemberId();
         return ResponseEntity.ok(productService.getProductDetail(currentMemberId, id));
     }
 

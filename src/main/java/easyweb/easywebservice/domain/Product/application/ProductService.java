@@ -2,6 +2,7 @@ package easyweb.easywebservice.domain.Product.application;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 import easyweb.easywebservice.domain.Category.exception.CategoryNotFoundException;
 import easyweb.easywebservice.domain.Category.model.Category;
@@ -124,22 +125,41 @@ public class ProductService {
 
     @Transactional
     public ProductDetailDto getProductDetail(Long memberId, Long productId) {
-        Product product = productRepository.findById(productId).orElseThrow(NotFoundByIdException::new);
-        boolean liked = likeRepository.existsByMemberIdAndProductId(memberId, productId);
-        Category category = product.getCategory();
-        return ProductDetailDto.builder()
-                .id(productId)
-                .name(product.getName())
-                .price(product.getPrice())
-                .imagePath(product.getImagePath())
-                .liked(liked)
-                .shippingCompany(product.getShippingCompany())
-                .detailImageUrl1(product.getDetailImageUrl1())
-                .detailImageUrl2(product.getDetailImageUrl2())
-                .manufacturer(product.getManufacturer())
-                .status(product.getStatus())
-                .category(category.getName())
-                .build();
+        if (Objects.equals(memberId, null)) {
+            Product product = productRepository.findById(productId).orElseThrow(NotFoundByIdException::new);
+            Category category = product.getCategory();
+            return ProductDetailDto.builder()
+                    .id(productId)
+                    .name(product.getName())
+                    .price(product.getPrice())
+                    .imagePath(product.getImagePath())
+                    .liked(false)
+                    .shippingCompany(product.getShippingCompany())
+                    .detailImageUrl1(product.getDetailImageUrl1())
+                    .detailImageUrl2(product.getDetailImageUrl2())
+                    .manufacturer(product.getManufacturer())
+                    .status(product.getStatus())
+                    .category(category.getName())
+                    .build();
+        } else {
+            Product product = productRepository.findById(productId).orElseThrow(NotFoundByIdException::new);
+            boolean liked = likeRepository.existsByMemberIdAndProductId(memberId, productId);
+            Category category = product.getCategory();
+            return ProductDetailDto.builder()
+                    .id(productId)
+                    .name(product.getName())
+                    .price(product.getPrice())
+                    .imagePath(product.getImagePath())
+                    .liked(liked)
+                    .shippingCompany(product.getShippingCompany())
+                    .detailImageUrl1(product.getDetailImageUrl1())
+                    .detailImageUrl2(product.getDetailImageUrl2())
+                    .manufacturer(product.getManufacturer())
+                    .status(product.getStatus())
+                    .category(category.getName())
+                    .build();
+        }
+
     }
 
     @Transactional
