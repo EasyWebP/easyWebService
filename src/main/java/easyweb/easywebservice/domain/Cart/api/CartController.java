@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import easyweb.easywebservice.domain.Cart.application.CartService;
-import easyweb.easywebservice.domain.Cart.dto.CartDTO.CartCreateDTO;
 import easyweb.easywebservice.domain.Cart.dto.CartItemDTO.CartItemCreateDTO;
 import easyweb.easywebservice.domain.Cart.dto.CartItemDTO.CartItemDeleteDTO;
 import easyweb.easywebservice.domain.Cart.dto.CartItemDTO.CartItemInfoDTO;
 import easyweb.easywebservice.domain.Cart.model.Cart;
+import easyweb.easywebservice.global.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -44,13 +44,13 @@ public class CartController {
      * 그 장바구니에 아이템 추가하면될듯??
      */
     @PostMapping
-    public ResponseEntity<Cart> addItemToCart(@RequestBody CartCreateDTO cartCreateDTO,
-            @RequestBody List<CartItemCreateDTO> cartItemCreateDTOs) {
-        Cart cart = cartService.addItemToCart(cartCreateDTO, cartItemCreateDTOs);
+    public ResponseEntity<Cart> addItemToCart(@RequestBody CartItemCreateDTO cartItemCreateDTO) {
+        Long memberId = SecurityUtil.getCurrentMemberId();
+        Cart cart = cartService.addItemToCart(memberId, cartItemCreateDTO);
         return ResponseEntity.ok(cart);
     }
 
-    @GetMapping("/{cartId}/cartItems")
+    @GetMapping("/{cartId}")
     public ResponseEntity<List<CartItemInfoDTO>> getCartItems(@PathVariable Long cartId) {
         List<CartItemInfoDTO> cartItems = cartService.getCartItems(cartId);
         return ResponseEntity.ok(cartItems);

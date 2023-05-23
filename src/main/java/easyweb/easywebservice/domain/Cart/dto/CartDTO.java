@@ -22,8 +22,6 @@ public class CartDTO {
     public static class CartCreateDTO {
         @Schema(description = "멤버 아이디")
         private Long memberId;
-        @Schema(description = "제품 아이디 리스트")
-        private List<Long> productIds;
         @Schema(description = "카트에 담긴 상품 개수")
         private int count;
 
