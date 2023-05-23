@@ -25,7 +25,7 @@ updateMember있으면 저 메서드 잘못 쓰면 내가 담아놓은 장바구�
 public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "cart_id") // 아이디 칼럼명 명시적으로 써줘야행
+    @Column(name = "cart_id")
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
@@ -43,7 +43,6 @@ public class Cart {
         this.count = count;
     }
 
-//    @Builder 이거 Builder 생성자 아닌 곳에 써서 주석처리함
     public void updateMember(Member member) {
         this.member = member;
     }

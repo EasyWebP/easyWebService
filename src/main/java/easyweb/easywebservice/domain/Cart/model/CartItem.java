@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-
 /*
 여기서도 updateProduct랑 updateCart는 빼는게 좋을듯??
 
@@ -23,7 +22,7 @@ updateCount는 필요할 것 같네
 public class CartItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "cartItem_id") // 이렇게 아이디 칼럼 명시적으로 적어주는게 좋아여
+    @Column(name = "cartItem_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -41,14 +40,6 @@ public class CartItem {
         this.product = product;
         this.cart = cart;
         this.count = count;
-    }
-
-    public void updateProduct(Product product) {
-        this.product = product;
-    }
-
-    public void updateCart(Cart cart) {
-        this.cart = cart;
     }
 
     public void updateCount(int count) {
