@@ -1,6 +1,5 @@
 package easyweb.easywebservice.domain.Product.repository;
 
-import easyweb.easywebservice.domain.Product.dto.ProductDTO;
 import easyweb.easywebservice.domain.Product.dto.ProductInfoDto;
 import org.apache.ibatis.annotations.Mapper;
 

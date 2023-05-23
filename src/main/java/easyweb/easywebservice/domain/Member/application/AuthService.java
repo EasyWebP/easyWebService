@@ -1,5 +1,7 @@
 package easyweb.easywebservice.domain.Member.application;
 
+import easyweb.easywebservice.domain.Cart.model.Cart;
+import easyweb.easywebservice.domain.Cart.repository.CartRepository;
 import easyweb.easywebservice.domain.Member.dto.MemberDTO;
 import easyweb.easywebservice.domain.Member.dto.MemberDTO.*;
 import easyweb.easywebservice.domain.Member.exception.MemberExistsWithEmailException;
@@ -33,6 +35,7 @@ import static easyweb.easywebservice.global.common.JwtConstants.REFRESH_TOKEN_EX
 @RequiredArgsConstructor
 public class AuthService {
     private final MemberRepository memberRepository;
+    private final CartRepository cartRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final RedisTemplate<String, String> redisTemplate;
@@ -52,6 +55,8 @@ public class AuthService {
         signUpDto.encode(passwordEncoder);
         Member entity = signUpDto.toEntity();
         memberRepository.save(entity);
+        Cart build = Cart.builder().member(entity).count(0).build();
+        cartRepository.save(build);
         return new StringApiResult("CREATED");
 
     }
