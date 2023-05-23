@@ -61,7 +61,7 @@
         SELECT p.product_id
         FROM product p
                  JOIN category c on p.category_id = c.category_id
-                 JOIN liked l on p.product_id = l.product_id
+                 LEFT JOIN liked l on p.product_id = l.product_id
         WHERE p.status = #{status}
         GROUP BY p.product_id
     </select>
