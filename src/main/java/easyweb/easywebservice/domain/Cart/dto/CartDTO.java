@@ -1,7 +1,5 @@
 package easyweb.easywebservice.domain.Cart.dto;
 
-import java.util.List;
-
 import easyweb.easywebservice.domain.Cart.model.Cart;
 import easyweb.easywebservice.domain.Member.model.Member;
 import easyweb.easywebservice.domain.Member.repository.MemberRepository;
