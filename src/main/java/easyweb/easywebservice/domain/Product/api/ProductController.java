@@ -114,7 +114,7 @@ public class ProductController {
             @ApiResponse(responseCode = "200", description = "제품 좋아요 성공시", content = @Content(schema = @Schema(implementation = Liked.class)))
     })
     @PostMapping("/like")
-    public ResponseEntity<Liked> addLike(@RequestBody LikeCreateDto likeCreateDto) {
+    public ResponseEntity<String> addLike(@RequestBody LikeCreateDto likeCreateDto) {
 
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(productService.addLikeToProduct(currentMemberId, likeCreateDto));
@@ -124,7 +124,7 @@ public class ProductController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "제품 좋아요 해제 성공시", content = @Content(schema = @Schema(implementation = LikeDeleteDto.class)))
     })
-    @DeleteMapping("/like/{id}")
+    @DeleteMapping("/like")
     public ResponseEntity<LikeDeleteDto> deleteLike(@RequestBody LikeDeleteDto likeDeleteDto) {
 
         Long currentMemberId = SecurityUtil.getCurrentMemberId();

@@ -169,14 +169,16 @@ public class ProductService {
     }
 
     @Transactional
-    public Liked addLikeToProduct(Long memberId, LikeCreateDto likeCreateDto) {
+    public String addLikeToProduct(Long memberId, LikeCreateDto likeCreateDto) {
         if (likeRepository.existsByMemberIdAndProductId(memberId, likeCreateDto.getProductId())) {
             throw new LikeAlreadyExists();
         }
         Member member = memberRepository.findById(memberId).orElseThrow(NotFoundByIdException::new);
         Product product = productRepository.findById(likeCreateDto.getProductId()).orElseThrow(NotFoundByIdException::new);
         Liked build = Liked.builder().member(member).product(product).build();
-        return likeRepository.save(build);
+        likeRepository.save(build);
+
+        return "CREATED";
 
     }
 
