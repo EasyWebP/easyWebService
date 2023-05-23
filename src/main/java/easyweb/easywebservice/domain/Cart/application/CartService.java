@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import easyweb.easywebservice.domain.Cart.dto.CartDTO.CartCreateDTO;
 import easyweb.easywebservice.domain.Cart.dto.CartItemDTO.CartItemCreateDTO;
 import easyweb.easywebservice.domain.Cart.dto.CartItemDTO.CartItemDeleteDTO;
 import easyweb.easywebservice.domain.Cart.dto.CartItemDTO.CartItemInfoDTO;
@@ -21,7 +20,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-@Transactional
 @Service
 public class CartService {
     private final MemberRepository memberRepository;
@@ -30,46 +28,27 @@ public class CartService {
     private final CartItemRepository cartItemRepository;
 
     // 카트에 제품 추가
-    public Cart addItemToCart(CartCreateDTO cartCreateDTO, List<CartItemCreateDTO> cartItemCreateDTOs) {
-        Member member = memberRepository.findById(cartCreateDTO.getMemberId())
+    @Transactional
+    public Cart addItemToCart(Long memberId, CartItemCreateDTO cartItemCreateDTO) {
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("Member not found"));
 
         Cart cart = member.getCart();
-        for (CartItemCreateDTO cartItemCreateDTO : cartItemCreateDTOs) {
-            Product product = productRepository.findById(cartItemCreateDTO.getProductId())
-                    .orElseThrow(() -> new IllegalArgumentException("Product not found"));
-            /*
-             * 상품조회가 중복되는 것 같아 그냥
-             * CartItem.builder.product(product).cart(cart).count(cartItemCreateDto.getCount
-             * ()).build;
-             * 로 CartItem을 생성해도되지 않을까?
-             */
-            CartItem cartItem = CartItem.builder().product(product).cart(cart).count(cartItemCreateDTO.getCount())
-                    .build();
 
-            cartItemRepository.save(cartItem);
-            /*
-             * Cart에 장바구니 총 아이템 수를 계산할 count가 없어도 장바구니 아이템 총 개수를 계산할 수 있다는 놀라운 사실
-             * 
-             * 그렇기 때문에 아래 코드는 사실 불필요합니당
-             */
-            cart.updateCount(cart.getCount() + cartItemCreateDTO.getCount());
-        }
+        Product product = productRepository.findById(cartItemCreateDTO.getProductId())
+                .orElseThrow(() -> new IllegalArgumentException("Product not found"));
+
+        CartItem cartItem = CartItem.builder().product(product).cart(cart).count(cartItemCreateDTO.getCount())
+                .build();
+        cartItemRepository.save(cartItem);
+
+        cart.updateCount(cart.getCount() + cartItemCreateDTO.getCount());
 
         return cart;
     }
 
-    /*
-     * 아래 코드도 잘했네
-     * 
-     * 아래 코드가 가독성이 안좋다고 느껴지거나,
-     * 뭔가 코드 짜면서 아 이거 좀 아닌 것 같은데, 더 편하게 할 수 있을 것 같은데
-     * 라는 생각이 들었다면
-     * 
-     * https://ssdragon.tistory.com/97
-     * JPA DTO 직접 조회를 찾아보세영
-     */
     // 카트 안의 제품들 조회
+    @Transactional
     public List<CartItemInfoDTO> getCartItems(Long cartId) {
         Cart cart = cartRepository.findById(cartId)
                 .orElseThrow(() -> new IllegalArgumentException("Cart not found"));
@@ -84,6 +63,7 @@ public class CartService {
     }
 
     // 카트 안의 제품 삭제
+    @Transactional
     public void deleteCartItem(CartItemDeleteDTO cartItemDeleteDTO) {
         CartItem cartItem = cartItemRepository.findById(cartItemDeleteDTO.getItemId())
                 .orElseThrow(() -> new IllegalArgumentException("Cart item not found"));
