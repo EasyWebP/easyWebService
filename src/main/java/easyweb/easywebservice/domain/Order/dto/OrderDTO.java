@@ -62,6 +62,54 @@ public class OrderDTO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Getter
+    @Schema(description = "직접 주문 생성 요청 DTO")
+    public static class OrderDirectCreateDTO {
+        @Schema(description = "주문 일자")
+        private LocalDate orderDate;
+        @Schema(description = "주문 번호")
+        private String orderNumber;
+        @Schema(description = "연락처")
+        private String phoneNumber;
+        @Schema(description = "배송지 주소")
+        private String address;
+        @Schema(description = "제품 개수")
+        private int count;
+
+        public String getFormattedPhoneNumber() {
+            return Format.phone(phoneNumber);
+        }
+
+        private String generateOrderNumber() {
+            Random random = new Random();
+            StringBuilder sb = new StringBuilder();
+
+            for (int i = 0; i < 8; i++) {
+                int digit = random.nextInt(10);
+                sb.append(digit);
+            }
+
+            return sb.toString();
+        }
+
+        public OrderBase toEntity(Member member) {
+            orderDate = LocalDate.now();
+            orderNumber = generateOrderNumber();
+
+            return OrderBase.builder()
+                    .member(member)
+                    .orderDate(orderDate)
+                    .orderNumber(orderNumber)
+                    .phoneNumber(Format.phone(phoneNumber))
+                    .address(address)
+                    .count(count)
+                    .build();
+        }
+    }
+
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
     @Schema(description = "주문 정보 요청 DTO")
     public static class OrderInfoDTO {
         @Schema(description = "회원 이름")
