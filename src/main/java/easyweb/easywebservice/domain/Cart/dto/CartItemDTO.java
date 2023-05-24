@@ -42,15 +42,19 @@ public class CartItemDTO {
     @Schema(description = "카트 아이템 정보 요청 DTO")
     public static class CartItemInfoDTO {
         @Schema(description = "카트 아이템 아이디")
-        private Long id;
+        private Long cartItemId;
         @Schema(description = "제품 아이디")
         private Long productId;
         @Schema(description = "주문할 제품 개수")
         private int count;
-
-        public static CartItemInfoDTO fromCartItem(CartItem cartItem) {
-            return new CartItemInfoDTO(cartItem.getId(), cartItem.getProduct().getId(), cartItem.getCount());
-        }
+        @Schema(description = "제품 이름")
+        private String productName;
+        @Schema(description = "제품 가격")
+        private int price;
+        @Schema(description = "제조사")
+        private String manufacturer;
+        @Schema(description = "이미지 경로")
+        private String imagePath;
     }
 
     @Builder

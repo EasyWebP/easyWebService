@@ -3,6 +3,7 @@ package easyweb.easywebservice.domain.Product.model;
 import easyweb.easywebservice.domain.Cart.model.CartItem;
 import easyweb.easywebservice.domain.Category.model.Category;
 import easyweb.easywebservice.domain.Like.model.Liked;
+import easyweb.easywebservice.domain.Order.model.OrderItem;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -36,6 +37,9 @@ public class Product {
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<CartItem> cartItems = new ArrayList<>();
+
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    private List<OrderItem> orderItems = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     private ProductStatus status;
