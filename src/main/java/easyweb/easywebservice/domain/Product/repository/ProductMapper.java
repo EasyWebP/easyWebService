@@ -10,5 +10,9 @@ import java.util.List;
 public interface ProductMapper {
     List<ProductInfoDto> findProduct(HashMap<String, Object> map);
 
+    List<ProductInfoDto> findLikedProduct(HashMap<String, Object> map);
+
     List<Long> countQueryForProduct(HashMap<String, Object> map);
+
+    List<Long> countQueryForLikedProduct(HashMap<String, Object> map);
 }

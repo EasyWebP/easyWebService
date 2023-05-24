@@ -10,13 +10,5 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
-    @Query(value = "SELECT new easyweb.easywebservice.domain.Product.dto.ProductInfoDto(" +
-            "p.id, " +
-            "p.name, " +
-            "p.price, " +
-            "p.manufacturer, " +
-            "p.imagePath) " +
-            "FROM Product p " +
-            "LEFT JOIN Liked l ON l.member.id = :id")
-    Page<ProductInfoDto> findLikedProducts(@Param("id") Long memberId, Pageable pageable);
+
 }

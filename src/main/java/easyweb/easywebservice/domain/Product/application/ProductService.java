@@ -164,8 +164,14 @@ public class ProductService {
 
     @Transactional
     public Page<ProductInfoDto> getLikedProducts(Long memberId, Pageable pageable) {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("memberId", memberId);
+        map.put("offset", pageable.getOffset());
+        map.put("pageSize", pageable.getPageSize());
+        List<ProductInfoDto> likedProduct = productMapper.findLikedProduct(map);
+        List<Long> longs = productMapper.countQueryForLikedProduct(map);
+        return new PageImpl<>(likedProduct, pageable, longs.size());
 
-        return productRepository.findLikedProducts(memberId, pageable);
     }
 
     @Transactional

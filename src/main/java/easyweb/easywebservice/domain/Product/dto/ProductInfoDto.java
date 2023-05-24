@@ -21,12 +21,15 @@ public class ProductInfoDto {
     private String manufacturer;
     @Schema(description = "제품 사진 경로")
     private String imagePath;
+    @Schema(description = "제품 상태")
+    private String status;
     @Builder
-    public ProductInfoDto(Long id, String name, int price, String manufacturer,  String imagePath) {
+    public ProductInfoDto(Long id, String name, int price, String manufacturer,  String imagePath, String status) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.manufacturer = manufacturer;
         this.imagePath = imagePath;
+        this.status = status;
     }
 }
