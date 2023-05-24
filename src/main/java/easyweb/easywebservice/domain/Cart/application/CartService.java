@@ -29,7 +29,7 @@ public class CartService {
 
     // 카트에 제품 추가
     @Transactional
-    public Cart addItemToCart(Long memberId, CartItemCreateDTO cartItemCreateDTO) {
+    public void addItemToCart(Long memberId, CartItemCreateDTO cartItemCreateDTO) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("Member not found"));
 
@@ -43,8 +43,6 @@ public class CartService {
         cartItemRepository.save(cartItem);
 
         cart.updateCount(cart.getCount() + cartItemCreateDTO.getCount());
-
-        return cart;
     }
 
     // 카트 안의 제품들 조회
@@ -56,7 +54,16 @@ public class CartService {
 
         List<CartItemInfoDTO> cartItemDTOs = new ArrayList<>();
         for (CartItem cartItem : cartItems) {
-            cartItemDTOs.add(CartItemInfoDTO.fromCartItem(cartItem));
+            CartItemInfoDTO cartItemInfoDTO = CartItemInfoDTO.builder()
+                    .cartItemId(cartItem.getId())
+                    .productId(cartItem.getProduct().getId())
+                    .count(cartItem.getCount())
+                    .productName(cartItem.getProduct().getName())
+                    .price(cartItem.getProduct().getPrice())
+                    .manufacturer(cartItem.getProduct().getManufacturer())
+                    .build();
+
+            cartItemDTOs.add(cartItemInfoDTO);
         }
 
         return cartItemDTOs;

@@ -19,38 +19,37 @@ import easyweb.easywebservice.domain.Cart.application.CartService;
 import easyweb.easywebservice.domain.Cart.dto.CartItemDTO.CartItemCreateDTO;
 import easyweb.easywebservice.domain.Cart.dto.CartItemDTO.CartItemDeleteDTO;
 import easyweb.easywebservice.domain.Cart.dto.CartItemDTO.CartItemInfoDTO;
-import easyweb.easywebservice.domain.Cart.model.Cart;
 import easyweb.easywebservice.global.util.SecurityUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
-@Tag(name = "장바구니", description = "장바구니 관련 API 입니다.")
+@Tag(name = "장바구니", description = "장바구니 관련 API입니다.")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/carts")
 public class CartController {
     private final CartService cartService;
 
-    @Operation(summary = "장바구니에 아이템 추가", description = "장바구니에 아이템 추가 API 입니다")
+    @Operation(summary = "장바구니에 아이템 추가", description = "장바구니에 아이템을 추가하는 API입니다")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "장바구니에 아이템 추가 성공시", content = @Content(schema = @Schema(implementation = CartItemCreateDTO.class)))
     })
     @PostMapping
     public ResponseEntity<CartItemCreateDTO> addItemToCart(@RequestBody CartItemCreateDTO cartItemCreateDTO) {
         Long memberId = SecurityUtil.getCurrentMemberId();
-        Cart cart = cartService.addItemToCart(memberId, cartItemCreateDTO);
+        cartService.addItemToCart(memberId, cartItemCreateDTO);
         return ResponseEntity.ok(cartItemCreateDTO);
     }
 
-    @Operation(summary = "장바구니에 있는 아이템 조회", description = "장바구니에 있는 모든 아이템 조회 API 입니다")
+    @Operation(summary = "장바구니에 있는 아이템 조회", description = "장바구니에 있는 모든 아이템을 조회하는 API입니다")
     @GetMapping("/{cartId}")
     public ResponseEntity<List<CartItemInfoDTO>> getCartItems(@PathVariable Long cartId) {
         List<CartItemInfoDTO> cartItems = cartService.getCartItems(cartId);
         return ResponseEntity.ok(cartItems);
     }
 
-    @Operation(summary = "장바구니에 있는 아이템 삭제", description = "장바구니에 있는 아이템 삭제 API 입니다")
+    @Operation(summary = "장바구니에 있는 아이템 삭제", description = "장바구니에 있는 아이템을 삭제하는 API입니다")
     @DeleteMapping
     public ResponseEntity<String> deleteCartItem(@RequestBody CartItemDeleteDTO cartItemDeleteDTO) {
         try {

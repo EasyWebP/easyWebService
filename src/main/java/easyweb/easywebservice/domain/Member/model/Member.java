@@ -2,6 +2,7 @@ package easyweb.easywebservice.domain.Member.model;
 
 import easyweb.easywebservice.domain.Cart.model.Cart;
 import easyweb.easywebservice.domain.Like.model.Liked;
+import easyweb.easywebservice.domain.Order.model.Order;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,6 +24,9 @@ public class Member extends MemberBase {
 
     @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Cart cart;
+
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    private List<Order> orders = new ArrayList<>();
 
     @Builder
     public Member(Long id, String email, String password, Authority authority, UserLoginType userLoginType,
