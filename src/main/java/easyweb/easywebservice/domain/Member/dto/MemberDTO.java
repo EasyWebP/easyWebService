@@ -109,7 +109,7 @@ public class MemberDTO {
 
         public Member toEntity(PasswordEncoder passwordEncoder) {
             return Member.builder()
-                    .password(passwordEncoder.encode("12345678"))
+                    .password(passwordEncoder.encode(username))
                     .deleted(false)
                     .email(email)
                     .userName(username)
