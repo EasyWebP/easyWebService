@@ -28,23 +28,18 @@ public class OrderController {
 
     @Operation(summary = "주문 생성", description = "주문을 생성하는 API입니다")
     @PostMapping
-    public ResponseEntity<String> createOrder(@RequestBody OrderCreateDTO orderCreateDTO) {
+    public ResponseEntity<OrderInfoDTO> createOrder(@RequestBody OrderCreateDTO orderCreateDTO) {
         Long memberId = SecurityUtil.getCurrentMemberId();
-        orderService.createOrder(memberId, orderCreateDTO);
-        return ResponseEntity.ok("Order created successfully");
-    }
-
-    @Operation(summary = "주문 정보 반환", description = "주문 정보를 반환하는 API입니다")
-    @GetMapping("/{orderId}/info")
-    public ResponseEntity<OrderInfoDTO> getOrderInfo(@PathVariable Long orderId) {
+        Long orderId = orderService.createOrder(memberId, orderCreateDTO);
         OrderInfoDTO orderInfoDTO = orderService.getOrderInfo(orderId);
         return ResponseEntity.ok(orderInfoDTO);
     }
 
     @Operation(summary = "주문 정보 조회", description = "주문 정보를 조회하는 API입니다")
-    @GetMapping("/{orderId}/details")
-    public ResponseEntity<List<CheckOrderInfoDTO>> getCheckOrderInfo(@PathVariable Long orderId) {
-        List<CheckOrderInfoDTO> orderInfoDTOs = orderService.getCheckOrderInfo(orderId);
+    @GetMapping
+    public ResponseEntity<List<CheckOrderInfoDTO>> getCheckOrderInfo() {
+        Long memberId = SecurityUtil.getCurrentMemberId();
+        List<CheckOrderInfoDTO> orderInfoDTOs = orderService.getCheckOrderInfo(memberId);
         return ResponseEntity.ok(orderInfoDTOs);
     }
 }

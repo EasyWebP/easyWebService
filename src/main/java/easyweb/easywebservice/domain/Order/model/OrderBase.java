@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import easyweb.easywebservice.domain.Cart.model.Cart;
-import easyweb.easywebservice.domain.Cart.model.CartItem;
 import easyweb.easywebservice.domain.Member.model.Member;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -21,12 +21,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-// make Order entity by referring to the Product, Member, Cart and CartItem entities
-
 @Getter
 @NoArgsConstructor
 @Entity
-public class Order {
+public class OrderBase {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_id")
@@ -39,30 +37,25 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
-    /*
-    Cart를 빼고 CartItem 대신에 OrderItem을 만들어야될 것 같은 느낌이.....
-     */
+
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
     private Cart cart;
 
-    @OneToMany(mappedBy = "order")
-    private List<CartItem> cartItems;
+    // orderItem으로 바꿔야 함
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
+    private List<OrderItem> orderItems = new ArrayList<>();
+
+    public void setOrderItems(List<OrderItem> orderItems) {
+        this.orderItems = orderItems;
+    }
 
     @Builder
-    public Order(String orderNumber, LocalDate orderDate, String phoneNumber, String address, Member member) {
+    public OrderBase(String orderNumber, LocalDate orderDate, String phoneNumber, String address, Member member) {
         this.orderNumber = orderNumber;
         this.orderDate = orderDate;
         this.phoneNumber = phoneNumber;
         this.address = address;
         this.member = member;
-    }
-
-    public void addCartItem(CartItem cartItem) {
-        if (cartItems == null) {
-            cartItems = new ArrayList<>();
-        }
-        cartItems.add(cartItem);
-        cartItem.setOrder(this);
     }
 
     public void updateOrderNumber(String orderNumber) {
@@ -80,4 +73,5 @@ public class Order {
     public void updateAddress(String address) {
         this.address = address;
     }
+
 }

@@ -61,6 +61,7 @@ public class CartService {
                     .productName(cartItem.getProduct().getName())
                     .price(cartItem.getProduct().getPrice())
                     .manufacturer(cartItem.getProduct().getManufacturer())
+                    .imagePath(cartItem.getProduct().getImagePath())
                     .build();
 
             cartItemDTOs.add(cartItemInfoDTO);

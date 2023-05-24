@@ -53,6 +53,8 @@ public class CartItemDTO {
         private int price;
         @Schema(description = "제조사")
         private String manufacturer;
+        @Schema(description = "이미지 경로")
+        private String imagePath;
     }
 
     @Builder

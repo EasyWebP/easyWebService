@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.util.Random;
 
 import easyweb.easywebservice.domain.Member.model.Member;
-import easyweb.easywebservice.domain.Order.model.Order;
+import easyweb.easywebservice.domain.Order.model.OrderBase;
 import easyweb.easywebservice.domain.common.Format;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -44,11 +44,11 @@ public class OrderDTO {
             return sb.toString();
         }
 
-        public Order toEntity(Member member) {
+        public OrderBase toEntity(Member member) {
             orderDate = LocalDate.now();
             orderNumber = generateOrderNumber();
 
-            return Order.builder()
+            return OrderBase.builder()
                     .member(member)
                     .orderDate(orderDate)
                     .orderNumber(orderNumber)
