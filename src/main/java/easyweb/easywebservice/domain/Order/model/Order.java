@@ -39,7 +39,9 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
-
+    /*
+    Cart를 빼고 CartItem 대신에 OrderItem을 만들어야될 것 같은 느낌이.....
+     */
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
     private Cart cart;
 

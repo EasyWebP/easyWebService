@@ -21,7 +21,9 @@ public class Member extends MemberBase {
 
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Liked> likedProducts = new ArrayList<>();
-
+    /*
+    이거 CascadeType.REMOVE로 바꿔줭
+     */
     @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Cart cart;
 
