@@ -2,6 +2,10 @@ package easyweb.easywebservice.domain.Cart.api;
 
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,11 +33,14 @@ public class CartController {
     private final CartService cartService;
 
     @Operation(summary = "장바구니에 아이템 추가", description = "장바구니에 아이템 추가 API 입니다")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "장바구니에 아이템 추가 성공시", content = @Content(schema = @Schema(implementation = CartItemCreateDTO.class)))
+    })
     @PostMapping
-    public ResponseEntity<Cart> addItemToCart(@RequestBody CartItemCreateDTO cartItemCreateDTO) {
+    public ResponseEntity<CartItemCreateDTO> addItemToCart(@RequestBody CartItemCreateDTO cartItemCreateDTO) {
         Long memberId = SecurityUtil.getCurrentMemberId();
         Cart cart = cartService.addItemToCart(memberId, cartItemCreateDTO);
-        return ResponseEntity.ok(cart);
+        return ResponseEntity.ok(cartItemCreateDTO);
     }
 
     @Operation(summary = "장바구니에 있는 아이템 조회", description = "장바구니에 있는 모든 아이템 조회 API 입니다")
