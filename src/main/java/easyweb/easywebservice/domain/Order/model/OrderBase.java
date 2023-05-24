@@ -38,9 +38,6 @@ public class OrderBase {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
-    private Cart cart;
-
     // orderItem으로 바꿔야 함
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
     private List<OrderItem> orderItems = new ArrayList<>();

@@ -26,10 +26,6 @@ public class Cart {
     @OneToMany(mappedBy = "cart", fetch = FetchType.LAZY)
     private List<CartItem> cartItems = new ArrayList<>();
 
-    @OneToOne
-    @JoinColumn(name = "order_id")
-    private OrderBase order;
-
     private int count = 0; // 카트에 담긴 상품 개수
 
     @Builder

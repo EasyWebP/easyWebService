@@ -36,10 +36,9 @@ public class OrderController {
     }
 
     @Operation(summary = "주문 정보 조회", description = "주문 정보를 조회하는 API입니다")
-    @GetMapping
-    public ResponseEntity<List<CheckOrderInfoDTO>> getCheckOrderInfo() {
-        Long memberId = SecurityUtil.getCurrentMemberId();
-        List<CheckOrderInfoDTO> orderInfoDTOs = orderService.getCheckOrderInfo(memberId);
+    @GetMapping("/{orderId}")
+    public ResponseEntity<List<CheckOrderInfoDTO>> getCheckOrderInfo(@PathVariable Long orderId) {
+        List<CheckOrderInfoDTO> orderInfoDTOs = orderService.getCheckOrderInfo(orderId);
         return ResponseEntity.ok(orderInfoDTOs);
     }
 }

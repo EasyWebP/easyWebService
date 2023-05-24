@@ -23,7 +23,6 @@ import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class OrderService {
         private final MemberRepository memberRepository;
         private final OrderRepository orderRepository;
@@ -78,18 +77,7 @@ public class OrderService {
         }
 
         @Transactional
-        public List<CheckOrderInfoDTO> getCheckOrderInfo(Long memberId) {
-                Member member = memberRepository.findById(memberId)
-                                .orElseThrow(() -> new IllegalArgumentException("Member not found"));
-
-                List<OrderBase> orders = member.getOrders();
-
-                OrderBase latestOrder = orders.stream()
-                                .max(Comparator.comparing(OrderBase::getOrderDate))
-                                .orElseThrow(() -> new IllegalArgumentException("No orders found"));
-
-                Long orderId = latestOrder.getId();
-
+        public List<CheckOrderInfoDTO> getCheckOrderInfo(Long orderId) {
                 OrderBase order = orderRepository.findById(orderId)
                                 .orElseThrow(() -> new IllegalArgumentException("Order not found"));
 
