@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import easyweb.easywebservice.domain.Order.application.OrderService;
 import easyweb.easywebservice.domain.Order.dto.OrderDTO.CheckOrderInfoDTO;
 import easyweb.easywebservice.domain.Order.dto.OrderDTO.OrderCreateDTO;
+import easyweb.easywebservice.domain.Order.dto.OrderDTO.OrderDirectCreateDTO;
 import easyweb.easywebservice.domain.Order.dto.OrderDTO.OrderInfoDTO;
 import easyweb.easywebservice.global.util.SecurityUtil;
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,6 +32,16 @@ public class OrderController {
     public ResponseEntity<OrderInfoDTO> createOrder(@RequestBody OrderCreateDTO orderCreateDTO) {
         Long memberId = SecurityUtil.getCurrentMemberId();
         Long orderId = orderService.createOrder(memberId, orderCreateDTO);
+        OrderInfoDTO orderInfoDTO = orderService.getOrderInfo(orderId);
+        return ResponseEntity.ok(orderInfoDTO);
+    }
+
+    @Operation(summary = "바로 주문 생성", description = "한 제품에 대한 주문을 바로 생성하는 API입니다")
+    @PostMapping("{productId}")
+    public ResponseEntity<OrderInfoDTO> createDirectOrder(@PathVariable Long productId,
+            @RequestBody OrderDirectCreateDTO orderDirectCreateDTO) {
+        Long memberId = SecurityUtil.getCurrentMemberId();
+        Long orderId = orderService.createDirectOrder(productId, memberId, orderDirectCreateDTO);
         OrderInfoDTO orderInfoDTO = orderService.getOrderInfo(orderId);
         return ResponseEntity.ok(orderInfoDTO);
     }

@@ -17,9 +17,9 @@ import easyweb.easywebservice.domain.Order.model.OrderItem;
 import easyweb.easywebservice.domain.Order.repository.OrderItemRepository;
 import easyweb.easywebservice.domain.Order.repository.OrderRepository;
 import easyweb.easywebservice.domain.Product.model.Product;
+import easyweb.easywebservice.domain.Product.repository.ProductRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +28,7 @@ public class OrderService {
         private final OrderRepository orderRepository;
         private final CartItemRepository cartItemRepository;
         private final OrderItemRepository orderItemRepository;
+        private final ProductRepository productRepository;
 
         @Transactional
         public Long createOrder(Long memberId, OrderCreateDTO orderCreateDTO) {
@@ -56,6 +57,29 @@ public class OrderService {
                 cartItemRepository.deleteAll(cartItems);
 
                 orderItemRepository.saveAll(orderItems);
+
+                return order.getId();
+        }
+
+        @Transactional
+        public Long createDirectOrder(Long productId, Long memberId, OrderDirectCreateDTO orderDirectCreateDTO) {
+                Member member = memberRepository.findById(memberId)
+                                .orElseThrow(() -> new IllegalArgumentException("Member not found"));
+
+                OrderBase order = orderDirectCreateDTO.toEntity(member);
+
+                Product product = productRepository.findById(productId)
+                                .orElseThrow(() -> new IllegalArgumentException("Product not found"));
+
+                OrderItem orderItem = OrderItem.builder()
+                                .product(product)
+                                .count(order.getCount())
+                                .build();
+
+                orderItem.setOrder(order);
+
+                orderRepository.save(order);
+                orderItemRepository.save(orderItem);
 
                 return order.getId();
         }
@@ -91,6 +115,8 @@ public class OrderService {
                         CheckOrderInfoDTO checkOrderInfoDTO = CheckOrderInfoDTO.builder()
                                         .imagePath(product.getImagePath())
                                         .productName(product.getName())
+                                        .manufacturer(product.getManufacturer())
+                                        .price(product.getPrice())
                                         .orderDate(order.getOrderDate())
                                         .orderNumber(order.getOrderNumber())
                                         .count(orderItem.getCount())

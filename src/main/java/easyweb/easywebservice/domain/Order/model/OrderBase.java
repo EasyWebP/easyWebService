@@ -33,6 +33,7 @@ public class OrderBase {
     private LocalDate orderDate;
     private String phoneNumber;
     private String address;
+    private int count;
 
     @ManyToOne
     @JoinColumn(name = "member_id")
@@ -47,28 +48,13 @@ public class OrderBase {
     }
 
     @Builder
-    public OrderBase(String orderNumber, LocalDate orderDate, String phoneNumber, String address, Member member) {
+    public OrderBase(String orderNumber, LocalDate orderDate, String phoneNumber, String address, Member member,
+            int count) {
         this.orderNumber = orderNumber;
         this.orderDate = orderDate;
         this.phoneNumber = phoneNumber;
         this.address = address;
         this.member = member;
+        this.count = count;
     }
-
-    public void updateOrderNumber(String orderNumber) {
-        this.orderNumber = orderNumber;
-    }
-
-    public void updateOrderDate(LocalDate orderDate) {
-        this.orderDate = orderDate;
-    }
-
-    public void updatePhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public void updateAddress(String address) {
-        this.address = address;
-    }
-
 }
