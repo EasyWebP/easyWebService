@@ -18,6 +18,9 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 import static easyweb.easywebservice.global.common.JwtConstants.AUTHORIZATION_HEADER;
 import static easyweb.easywebservice.global.common.JwtConstants.BEARER_PREFIX;
@@ -36,6 +39,7 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
         log.info(request.getMethod()+" "+ request.getRequestURI());
+
 
         try {
             // 1. request Header에서 토큰 꺼냄, 여기서 HTTP ONLY 쿠키에서 읽어오게 변경 가능

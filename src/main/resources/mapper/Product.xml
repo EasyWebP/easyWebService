@@ -6,7 +6,7 @@
 
 <mapper namespace="easyweb.easywebservice.domain.Product.repository.ProductMapper">
     <select id="findProduct" parameterType="HashMap" resultType="easyweb.easywebservice.domain.Product.dto.ProductInfoDto">
-        SELECT p.product_id, p.name, p.price, p.manufacturer, p.image_path
+        SELECT p.product_id, p.name, p.price, p.manufacturer, p.image_path, p.status
         FROM product p
         JOIN category c on p.category_id = c.category_id
         LEFT JOIN liked l on p.product_id = l.product_id
@@ -64,5 +64,34 @@
                  LEFT JOIN liked l on p.product_id = l.product_id
         WHERE p.status = #{status}
         GROUP BY p.product_id
+    </select>
+    <select id="findLikedProduct" parameterType="HashMap" resultType="easyweb.easywebservice.domain.Product.dto.ProductInfoDto">
+        SELECT p.product_id, p.name, p.price, p.manufacturer, p.image_path, p.status
+        FROM product p
+        LEFT JOIN liked l on p.product_id = l.product_id
+        WHERE l.member_id = ${memberId}
+        <choose>
+            <when test="pageSize != null and offset != null">
+                LIMIT ${pageSize}
+                OFFSET ${offset}
+            </when>
+            <when test="pageSize == null and offset != null">
+                LIMIT 20
+                OFFSET ${offset}
+            </when>
+            <when test="pageSize != null and offset == null">
+                LIMIT ${pageSize}
+            </when>
+            <otherwise>
+                LIMIT 20
+            </otherwise>
+        </choose>
+    </select>
+    <select id="countQueryForLikedProduct" parameterType="HashMap" resultType="Long">
+        SELECT p.product_id
+        FROM product p
+                 JOIN category c on p.category_id = c.category_id
+                 LEFT JOIN liked l on p.product_id = l.product_id
+        WHERE l.member_id = ${memberId}
     </select>
 </mapper>
