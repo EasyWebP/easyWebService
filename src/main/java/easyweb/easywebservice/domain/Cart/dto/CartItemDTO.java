@@ -2,6 +2,7 @@ package easyweb.easywebservice.domain.Cart.dto;
 
 import easyweb.easywebservice.domain.Cart.model.CartItem;
 import easyweb.easywebservice.domain.Product.model.Product;
+import easyweb.easywebservice.domain.Product.model.Product.ProductStatus;
 import easyweb.easywebservice.domain.Product.repository.ProductRepository;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -55,6 +56,8 @@ public class CartItemDTO {
         private String manufacturer;
         @Schema(description = "이미지 경로")
         private String imagePath;
+        @Schema(description = "제품 상태")
+        private ProductStatus status;
     }
 
     @Builder
