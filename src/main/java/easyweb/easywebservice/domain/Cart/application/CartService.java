@@ -6,11 +6,11 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import easyweb.easywebservice.domain.Cart.dto.CartItemDTO.CartItemCreateDTO;
-import easyweb.easywebservice.domain.Cart.dto.CartItemDTO.CartItemDeleteDTO;
 import easyweb.easywebservice.domain.Cart.dto.CartItemDTO.CartItemInfoDTO;
 import easyweb.easywebservice.domain.Cart.model.Cart;
 import easyweb.easywebservice.domain.Cart.model.CartItem;
 import easyweb.easywebservice.domain.Cart.repository.CartItemRepository;
+import easyweb.easywebservice.domain.Cart.repository.CartRepository;
 import easyweb.easywebservice.domain.Member.model.Member;
 import easyweb.easywebservice.domain.Member.repository.MemberRepository;
 import easyweb.easywebservice.domain.Product.model.Product;
@@ -23,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 public class CartService {
     private final MemberRepository memberRepository;
     private final ProductRepository productRepository;
+    private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
 
     // 카트에 제품 추가
@@ -41,6 +42,7 @@ public class CartService {
         cartItemRepository.save(cartItem);
 
         cart.updateCount(cart.getCount() + cartItemCreateDTO.getCount());
+        cartRepository.save(cart);
     }
 
     // 카트 안의 제품들 조회
@@ -73,17 +75,14 @@ public class CartService {
 
     // 카트 안의 제품 삭제
     @Transactional
-    public void deleteCartItem(CartItemDeleteDTO cartItemDeleteDTO) {
-        CartItem cartItem = cartItemRepository.findById(cartItemDeleteDTO.getItemId())
+    public void deleteCartItem(Long cartItemId) {
+        CartItem cartItem = cartItemRepository.findById(cartItemId)
                 .orElseThrow(() -> new IllegalArgumentException("Cart item not found"));
-
-        if (!cartItem.getCart().getId().equals(cartItemDeleteDTO.getCartId())) {
-            throw new IllegalArgumentException("Cart item does not belong to the provided cart ID");
-        }
 
         Cart cart = cartItem.getCart();
         int cartItemCount = cartItem.getCount();
         cart.updateCount(cart.getCount() - cartItemCount);
+        cartRepository.save(cart);
         cartItemRepository.delete(cartItem);
     }
 

@@ -59,24 +59,4 @@ public class CartItemDTO {
         @Schema(description = "제품 상태")
         private ProductStatus status;
     }
-
-    @Builder
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @Getter
-    @Schema(description = "카트 아이템 삭제 요청 DTO")
-    public static class CartItemDeleteDTO {
-        @Schema(description = "카트 아이템 아이디")
-        private Long itemId;
-        @Schema(description = "카트 아이디")
-        private Long cartId;
-
-        public void updateItemId(Long itemId) {
-            this.itemId = itemId;
-        }
-
-        public void updateCartId(Long cartId) {
-            this.cartId = cartId;
-        }
-    }
 }
