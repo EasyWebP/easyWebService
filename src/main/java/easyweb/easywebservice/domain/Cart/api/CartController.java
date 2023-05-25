@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import easyweb.easywebservice.domain.Cart.application.CartService;
 import easyweb.easywebservice.domain.Cart.dto.CartItemDTO.CartItemCreateDTO;
-import easyweb.easywebservice.domain.Cart.dto.CartItemDTO.CartItemDeleteDTO;
 import easyweb.easywebservice.domain.Cart.dto.CartItemDTO.CartItemInfoDTO;
 import easyweb.easywebservice.global.util.SecurityUtil;
 import io.swagger.v3.oas.annotations.Operation;
@@ -51,9 +50,9 @@ public class CartController {
 
     @Operation(summary = "장바구니에 있는 아이템 삭제", description = "장바구니에 있는 아이템을 삭제하는 API입니다")
     @DeleteMapping
-    public ResponseEntity<String> deleteCartItem(@RequestBody CartItemDeleteDTO cartItemDeleteDTO) {
+    public ResponseEntity<String> deleteCartItem(@RequestBody Long cartItemId) {
         try {
-            cartService.deleteCartItem(cartItemDeleteDTO);
+            cartService.deleteCartItem(cartItemId);
             return ResponseEntity.ok("Cart item deleted successfully");
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

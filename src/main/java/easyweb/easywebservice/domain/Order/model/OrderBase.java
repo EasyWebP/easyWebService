@@ -43,6 +43,10 @@ public class OrderBase {
         this.orderItems = orderItems;
     }
 
+    public void updateCount(int count) {
+        this.count = count;
+    }
+
     @Builder
     public OrderBase(String orderNumber, LocalDate orderDate, String phoneNumber, String address, Member member,
             int count) {
