@@ -48,7 +48,7 @@ public class OrderController {
 
     @Operation(summary = "모든 주문 제품 조회", description = "모든 주문 제품 정보를 반환하는 API입니다")
     @GetMapping
-    public ResponseEntity<List<OrderItemInfoDTO>> getOrderItemInfo(Long orderId) {
+    public ResponseEntity<List<OrderItemInfoDTO>> getOrderItemInfo() {
         Long memberId = SecurityUtil.getCurrentMemberId();
         List<OrderItemInfoDTO> orderItemInfoDTOs = orderService.getOrderItemInfo(memberId);
         return ResponseEntity.ok(orderItemInfoDTOs);
