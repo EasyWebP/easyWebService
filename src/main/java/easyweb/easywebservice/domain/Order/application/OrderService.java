@@ -1,7 +1,6 @@
 package easyweb.easywebservice.domain.Order.application;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -117,6 +116,7 @@ public class OrderService {
                                         .productName(product.getName())
                                         .manufacturer(product.getManufacturer())
                                         .price(product.getPrice())
+                                        .status(product.getStatus())
                                         .orderDate(order.getOrderDate())
                                         .orderNumber(order.getOrderNumber())
                                         .count(orderItem.getCount())

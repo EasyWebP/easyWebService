@@ -5,6 +5,7 @@ import java.util.Random;
 
 import easyweb.easywebservice.domain.Member.model.Member;
 import easyweb.easywebservice.domain.Order.model.OrderBase;
+import easyweb.easywebservice.domain.Product.model.Product.ProductStatus;
 import easyweb.easywebservice.domain.common.Format;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -136,6 +137,8 @@ public class OrderDTO {
         private String productName;
         @Schema(description = "제조사")
         private String manufacturer;
+        @Schema(description = "제품 상태")
+        private ProductStatus status;
         @Schema(description = "제품 가격")
         private int price;
         @Schema(description = "주문 수량")

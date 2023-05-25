@@ -1,11 +1,9 @@
 package easyweb.easywebservice.domain.Product.dto;
 
-import easyweb.easywebservice.domain.Product.model.Product;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
 @Data
@@ -23,8 +21,9 @@ public class ProductInfoDto {
     private String imagePath;
     @Schema(description = "제품 상태")
     private String status;
+
     @Builder
-    public ProductInfoDto(Long id, String name, int price, String manufacturer,  String imagePath, String status) {
+    public ProductInfoDto(Long id, String name, int price, String manufacturer, String imagePath, String status) {
         this.id = id;
         this.name = name;
         this.price = price;

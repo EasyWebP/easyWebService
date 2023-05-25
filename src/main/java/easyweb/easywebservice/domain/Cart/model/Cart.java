@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import easyweb.easywebservice.domain.Member.model.Member;
-import easyweb.easywebservice.domain.Order.model.OrderBase;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;

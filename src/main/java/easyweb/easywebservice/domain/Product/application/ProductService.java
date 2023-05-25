@@ -7,10 +7,8 @@ import java.util.Objects;
 import easyweb.easywebservice.domain.Category.exception.CategoryNotFoundException;
 import easyweb.easywebservice.domain.Category.model.Category;
 import easyweb.easywebservice.domain.Category.repository.CategoryRepository;
-import easyweb.easywebservice.domain.Like.dto.LikeDTO;
 import easyweb.easywebservice.domain.Like.dto.LikeDTO.LikeCreateDto;
 import easyweb.easywebservice.domain.Like.dto.LikeDTO.LikeResult;
-import easyweb.easywebservice.domain.Like.exception.LikeAlreadyExists;
 import easyweb.easywebservice.domain.Like.model.Liked;
 import easyweb.easywebservice.domain.Like.repository.LikeRepository;
 import easyweb.easywebservice.domain.Member.model.Member;
@@ -43,7 +41,8 @@ public class ProductService {
 
     @Transactional
     public Product addProduct(ProductCreateDTO productCreateDTO) {
-        Category category = categoryRepository.findCategoryByName(productCreateDTO.getCategory()).orElseThrow(CategoryNotFoundException::new);
+        Category category = categoryRepository.findCategoryByName(productCreateDTO.getCategory())
+                .orElseThrow(CategoryNotFoundException::new);
         Product product = productCreateDTO.toEntity(category);
         return productRepository.save(product);
     }
@@ -75,7 +74,8 @@ public class ProductService {
             existingProduct.updateDetailImageUrl2(productUpdateDTO.getDetailImageUrl2());
         }
         if (productUpdateDTO.getCategory() != null) {
-            Category category = categoryRepository.findCategoryByName(productUpdateDTO.getCategory()).orElseThrow(CategoryNotFoundException::new);
+            Category category = categoryRepository.findCategoryByName(productUpdateDTO.getCategory())
+                    .orElseThrow(CategoryNotFoundException::new);
             existingProduct.updateCategory(category);
         }
         if (productUpdateDTO.getStatus() != null) {
@@ -111,7 +111,7 @@ public class ProductService {
     }
 
     @Transactional
-    public Page<ProductInfoDto> getAllProducts(String status, String like,  String category, Pageable pageable) {
+    public Page<ProductInfoDto> getAllProducts(String status, String like, String category, Pageable pageable) {
         HashMap<String, Object> map = new HashMap<>();
         map.put("status", status);
         map.put("like", like);
@@ -181,16 +181,13 @@ public class ProductService {
             return LikeResult.builder().like(false).build();
         } else {
             Member member = memberRepository.findById(memberId).orElseThrow(NotFoundByIdException::new);
-            Product product = productRepository.findById(likeCreateDto.getProductId()).orElseThrow(NotFoundByIdException::new);
+            Product product = productRepository.findById(likeCreateDto.getProductId())
+                    .orElseThrow(NotFoundByIdException::new);
             Liked build = Liked.builder().member(member).product(product).build();
             likeRepository.save(build);
             return LikeResult.builder().like(true).build();
         }
 
-
-
-
     }
-
 
 }

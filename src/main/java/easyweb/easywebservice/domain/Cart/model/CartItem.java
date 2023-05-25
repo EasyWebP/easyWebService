@@ -1,6 +1,5 @@
 package easyweb.easywebservice.domain.Cart.model;
 
-import easyweb.easywebservice.domain.Order.model.OrderBase;
 import easyweb.easywebservice.domain.Product.model.Product;
 import jakarta.persistence.*;
 import lombok.Builder;
