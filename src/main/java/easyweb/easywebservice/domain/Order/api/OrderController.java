@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import easyweb.easywebservice.domain.Order.application.OrderService;
-import easyweb.easywebservice.domain.Order.dto.OrderDTO.CheckOrderInfoDTO;
 import easyweb.easywebservice.domain.Order.dto.OrderDTO.OrderCreateDTO;
 import easyweb.easywebservice.domain.Order.dto.OrderDTO.OrderDirectCreateDTO;
 import easyweb.easywebservice.domain.Order.dto.OrderDTO.OrderInfoDTO;
+import easyweb.easywebservice.domain.Order.dto.OrderDTO.OrderItemInfoDTO;
 import easyweb.easywebservice.global.util.SecurityUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -46,10 +46,11 @@ public class OrderController {
         return ResponseEntity.ok(orderInfoDTO);
     }
 
-    @Operation(summary = "주문 정보 조회", description = "주문 정보를 조회하는 API입니다")
-    @GetMapping("/{orderId}")
-    public ResponseEntity<List<CheckOrderInfoDTO>> getCheckOrderInfo(@PathVariable Long orderId) {
-        List<CheckOrderInfoDTO> orderInfoDTOs = orderService.getCheckOrderInfo(orderId);
-        return ResponseEntity.ok(orderInfoDTOs);
+    @Operation(summary = "모든 주문 제품 조회", description = "모든 주문 제품 정보를 반환하는 API입니다")
+    @GetMapping
+    public ResponseEntity<List<OrderItemInfoDTO>> getOrderItemInfo(Long orderId) {
+        Long memberId = SecurityUtil.getCurrentMemberId();
+        List<OrderItemInfoDTO> orderItemInfoDTOs = orderService.getOrderItemInfo(memberId);
+        return ResponseEntity.ok(orderItemInfoDTOs);
     }
 }

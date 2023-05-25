@@ -11,7 +11,6 @@ import easyweb.easywebservice.domain.Cart.dto.CartItemDTO.CartItemInfoDTO;
 import easyweb.easywebservice.domain.Cart.model.Cart;
 import easyweb.easywebservice.domain.Cart.model.CartItem;
 import easyweb.easywebservice.domain.Cart.repository.CartItemRepository;
-import easyweb.easywebservice.domain.Cart.repository.CartRepository;
 import easyweb.easywebservice.domain.Member.model.Member;
 import easyweb.easywebservice.domain.Member.repository.MemberRepository;
 import easyweb.easywebservice.domain.Product.model.Product;
@@ -24,7 +23,6 @@ import lombok.RequiredArgsConstructor;
 public class CartService {
     private final MemberRepository memberRepository;
     private final ProductRepository productRepository;
-    private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
 
     // 카트에 제품 추가
@@ -47,9 +45,11 @@ public class CartService {
 
     // 카트 안의 제품들 조회
     @Transactional
-    public List<CartItemInfoDTO> getCartItems(Long cartId) {
-        Cart cart = cartRepository.findById(cartId)
-                .orElseThrow(() -> new IllegalArgumentException("Cart not found"));
+    public List<CartItemInfoDTO> getCartItems(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("Member not found"));
+
+        Cart cart = member.getCart();
         List<CartItem> cartItems = cart.getCartItems();
 
         List<CartItemInfoDTO> cartItemDTOs = new ArrayList<>();

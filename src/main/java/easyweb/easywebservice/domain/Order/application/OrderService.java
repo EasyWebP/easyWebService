@@ -100,31 +100,35 @@ public class OrderService {
         }
 
         @Transactional
-        public List<CheckOrderInfoDTO> getCheckOrderInfo(Long orderId) {
-                OrderBase order = orderRepository.findById(orderId)
-                                .orElseThrow(() -> new IllegalArgumentException("Order not found"));
+        public List<OrderItemInfoDTO> getOrderItemInfo(Long memberId) {
+                Member member = memberRepository.findById(memberId)
+                                .orElseThrow(() -> new IllegalArgumentException("Member not found"));
 
-                List<OrderItem> orderItems = order.getOrderItems();
+                List<OrderBase> orders = member.getOrders();
 
-                List<CheckOrderInfoDTO> checkOrderInfoDTOs = new ArrayList<>();
+                List<OrderItemInfoDTO> orderItemInfoDTOs = new ArrayList<>();
 
-                for (OrderItem orderItem : orderItems) {
-                        Product product = orderItem.getProduct();
+                for (OrderBase order : orders) {
+                        List<OrderItem> orderItems = order.getOrderItems();
 
-                        CheckOrderInfoDTO checkOrderInfoDTO = CheckOrderInfoDTO.builder()
-                                        .imagePath(product.getImagePath())
-                                        .productName(product.getName())
-                                        .manufacturer(product.getManufacturer())
-                                        .price(product.getPrice())
-                                        .status(product.getStatus())
-                                        .orderDate(order.getOrderDate())
-                                        .orderNumber(order.getOrderNumber())
-                                        .count(orderItem.getCount())
-                                        .build();
+                        for (OrderItem orderItem : orderItems) {
+                                Product product = orderItem.getProduct();
 
-                        checkOrderInfoDTOs.add(checkOrderInfoDTO);
+                                OrderItemInfoDTO orderItemInfoDTO = OrderItemInfoDTO.builder()
+                                                .imagePath(product.getImagePath())
+                                                .productName(product.getName())
+                                                .manufacturer(product.getManufacturer())
+                                                .price(product.getPrice())
+                                                .status(product.getStatus())
+                                                .orderDate(order.getOrderDate())
+                                                .orderNumber(order.getOrderNumber())
+                                                .count(orderItem.getCount())
+                                                .build();
+
+                                orderItemInfoDTOs.add(orderItemInfoDTO);
+                        }
                 }
 
-                return checkOrderInfoDTOs;
+                return orderItemInfoDTOs;
         }
 }

@@ -129,8 +129,8 @@ public class OrderDTO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Getter
-    @Schema(description = "주문 정보 조회 요청 DTO")
-    public static class CheckOrderInfoDTO {
+    @Schema(description = "주문 제품 정보 요청 DTO")
+    public static class OrderItemInfoDTO {
         @Schema(description = "드론 이미지 경로")
         private String imagePath;
         @Schema(description = "제품 이름")
