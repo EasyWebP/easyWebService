@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import easyweb.easywebservice.domain.Cart.model.Cart;
 import easyweb.easywebservice.domain.Cart.model.CartItem;
 import easyweb.easywebservice.domain.Cart.repository.CartItemRepository;
+import easyweb.easywebservice.domain.Cart.repository.CartRepository;
 import easyweb.easywebservice.domain.Member.model.Member;
 import easyweb.easywebservice.domain.Member.repository.MemberRepository;
 import easyweb.easywebservice.domain.Order.dto.OrderDTO.*;
@@ -19,12 +20,15 @@ import easyweb.easywebservice.domain.Product.model.Product;
 import easyweb.easywebservice.domain.Product.repository.ProductRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class OrderService {
         private final MemberRepository memberRepository;
         private final OrderRepository orderRepository;
+        private final CartRepository cartRepository;
         private final CartItemRepository cartItemRepository;
         private final OrderItemRepository orderItemRepository;
         private final ProductRepository productRepository;
@@ -34,11 +38,19 @@ public class OrderService {
                 Member member = memberRepository.findById(memberId)
                                 .orElseThrow(() -> new IllegalArgumentException("Member not found"));
 
+                Cart cart = member.getCart();
+
+                List<CartItem> cartItems = cart.getCartItems();
+                if (cartItems.isEmpty()) {
+                        throw new IllegalStateException("cartItems cannot be empty");
+                }
+
                 OrderBase order = orderCreateDTO.toEntity(member);
 
-                Cart cart = member.getCart();
-                List<CartItem> cartItems = cart.getCartItems();
                 List<OrderItem> orderItems = new ArrayList<>();
+
+                int cartCount = cart.getCount();
+                int orderCount = order.getCount();
 
                 for (CartItem cartItem : cartItems) {
                         OrderItem orderItem = OrderItem.builder()
@@ -48,11 +60,18 @@ public class OrderService {
 
                         orderItem.setOrder(order);
                         orderItems.add(orderItem);
+
+                        orderCount += cartItem.getCount();
+                        cartCount -= cartItem.getCount();
                 }
 
-                order.setOrderItems(orderItems);
+                cart.updateCount(cartCount);
+                order.updateCount(orderCount);
+                cartRepository.save(cart);
 
+                order.setOrderItems(orderItems);
                 orderRepository.save(order);
+
                 cartItemRepository.deleteAll(cartItems);
 
                 orderItemRepository.saveAll(orderItems);
@@ -72,10 +91,11 @@ public class OrderService {
 
                 OrderItem orderItem = OrderItem.builder()
                                 .product(product)
-                                .count(order.getCount())
+                                .count(orderDirectCreateDTO.getCount())
                                 .build();
 
                 orderItem.setOrder(order);
+                order.updateCount(orderDirectCreateDTO.getCount());
 
                 orderRepository.save(order);
                 orderItemRepository.save(orderItem);

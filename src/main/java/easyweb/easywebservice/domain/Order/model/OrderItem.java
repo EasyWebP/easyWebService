@@ -1,6 +1,7 @@
 package easyweb.easywebservice.domain.Order.model;
 
 import easyweb.easywebservice.domain.Product.model.Product;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -18,6 +19,7 @@ import lombok.NoArgsConstructor;
 public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "orderItem_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
