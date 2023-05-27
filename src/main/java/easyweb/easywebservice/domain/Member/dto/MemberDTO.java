@@ -119,7 +119,7 @@ public class MemberDTO {
         }
 
         public UsernamePasswordAuthenticationToken toAuthentication() {
-            return new UsernamePasswordAuthenticationToken(email, "12345678");
+            return new UsernamePasswordAuthenticationToken(email, username);
         }
     }
 
