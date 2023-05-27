@@ -103,6 +103,8 @@ public class AuthService {
     public LoginResult socialLogin(SocialLoginDto socialLoginDto) {
         Member entity = socialLoginDto.toEntity(passwordEncoder);
         memberRepository.save(entity);
+        Cart build = Cart.builder().member(entity).count(0).build();
+        cartRepository.save(build);
 
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = socialLoginDto.toAuthentication();
 
